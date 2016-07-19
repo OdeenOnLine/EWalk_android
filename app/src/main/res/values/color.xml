@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="all_bg">#EEF2F6</color>
+    <color name="my_blue">#62D4D9</color>
+    <color name="dashedline">#CCD6DF</color>
+    <color name="my_red">#E14069</color>
+    <color name="my_orange">#FD8C2A</color>
+</resources>

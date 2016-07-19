@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/all_bg"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_home"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="50dp"
+            android:layout_above="@+id/tv_rank"
+            >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="15dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_step"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="50sp"
+                    android:textColor="#FFFFFF"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_step"
+                    android:layout_toRightOf="@+id/tv_step"
+                    android:layout_alignBottom="@+id/tv_step"
+                    android:layout_marginBottom="5dp"
+                    />
+
+
+            </RelativeLayout>
+
+            <milestone.ewalk.widget.DashedLineVerView
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="2"
+                android:gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_distance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0公里"
+                    android:textSize="13sp"
+                    android:textColor="#FD8C2A"/>
+
+                <TextView
+                    android:id="@+id/tv_calory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0千卡"
+                    android:textSize="13sp"
+                    android:textColor="#FF00FF"/>
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0小时0分"
+                    android:textSize="13sp"
+                    android:textColor="@color/my_blue"
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/icon_rank"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/tv_average_step"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="35dp"
+            android:text="排行榜"
+            android:textSize="15sp"
+            android:textColor="#FFFFFF"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            />
+
+
+        <milestone.ewalk.widget.CircularImage
+            android:id="@+id/iv_rank_hint"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_rank"
+            android:layout_marginRight="20dp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="最近7日"
+            android:textSize="15sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginLeft="15dp"
+            android:layout_above="@+id/iv_walk_line"
+            android:layout_marginBottom="10dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_average_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="平均:0步"
+            android:textSize="15sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginRight="15dp"
+            android:layout_above="@+id/iv_walk_line"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"/>
+        
+        <ImageView
+            android:id="@+id/iv_walk_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/bg_walk_line"
+            android:scaleType="fitXY"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/iv_walk_line"
+            >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="0dp"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="48"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="6"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="bottom"
+                    >
+
+                    <milestone.ewalk.widget.SpringProgressView
+                        android:id="@+id/progress7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="0dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_average_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/line_blue"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            />
+
+
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="48"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="7日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="11日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="5dp"
+                android:background="#BCBCBC"
+                />
+
+            <TextView
+                android:id="@+id/tv_day7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12日"
+                android:textSize="12sp"
+                android:textColor="#646464"/>
+
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="0dp"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_run"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/bg_button_blue"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="我要跑步"
+        android:textSize="15sp"
+        android:textColor="#FFFFFF"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <View
+        style="@style/set_item_Line_hor"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/tv_feedback"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="信息反馈"
+            android:textSize="15sp"
+            android:textColor="#646464"
+            android:drawableTop="@drawable/icon_suggest"
+            android:gravity="center"
+            android:drawablePadding="5dp"
+            android:padding="5dp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="职工服务"
+            android:textSize="15sp"
+            android:textColor="#646464"
+            android:drawableTop="@drawable/icon_service"
+            android:gravity="center"
+            android:drawablePadding="5dp"
+            android:padding="5dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_mine"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="我的"
+            android:textSize="15sp"
+            android:textColor="#646464"
+            android:drawableTop="@drawable/icon_mine"
+            android:gravity="center"
+            android:drawablePadding="5dp"
+            android:padding="5dp"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

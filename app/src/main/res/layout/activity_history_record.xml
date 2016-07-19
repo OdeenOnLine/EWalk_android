@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_back"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="历史记录"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="统计"
+            android:textColor="@color/my_blue"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            />
+
+    </RelativeLayout>
+
+    <View
+        style="@style/set_item_Line_hor"/>
+
+
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_record"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        ptr:ptrMode="pullUpFromBottom"
+        />
+
+    <LinearLayout
+        android:layout_width="8dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginLeft="15dp"
+        android:gravity="center_horizontal"
+        >
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#F0F0F2"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

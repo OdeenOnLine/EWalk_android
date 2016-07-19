@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ptr="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/all_bg">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_back"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:onClick="onClick"
+            />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            >
+
+            <TextView
+                android:id="@+id/tv_person"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:text="个人"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:background="@drawable/bg_button_blue"
+                />
+
+            <TextView
+                android:id="@+id/tv_team"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:text="团队"
+                android:textColor="@color/my_blue"
+                android:textSize="18sp"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        style="@style/set_item_Line_hor"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/tv_today"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="今日"
+                android:textColor="@color/my_blue"
+                android:textSize="15sp"
+                android:padding="10dp"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_yesterday"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="昨日"
+                android:textColor="#B5B5B5"
+                android:textSize="15sp"
+                android:padding="10dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_week"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="本周"
+                android:textColor="#B5B5B5"
+                android:textSize="15sp"
+                android:padding="10dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_month"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="本月"
+                android:textColor="#B5B5B5"
+                android:textSize="15sp"
+                android:padding="10dp"
+                />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_line"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            >
+
+            <ImageView
+                android:id="@+id/iv_bottom_line"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="2dip"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:scaleType="matrix"
+                android:src="@color/my_blue"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        style="@style/set_item_Line_hor"/>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/lv_rank"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        ptr:ptrMode="pullUpFromBottom"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/my_blue"
+        android:gravity="center_vertical"
+        >
+
+        <ImageView
+            android:id="@+id/iv_rank"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_rank_first"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_rank"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:gravity="center"
+            />
+
+
+
+        <milestone.ewalk.widget.CircularImage
+            android:id="@+id/iv_poster"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_my_team"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的团队"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:background="@drawable/bg_orange_corner"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tv_core"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:layout_marginLeft="10dp"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>

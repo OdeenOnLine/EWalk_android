@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/all_bg"
+    >
+
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/bmapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true" />
+
+
+    <ImageView
+        android:id="@+id/iv_operate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/ll_message"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/icon_enlarge"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_no_full"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            >
+
+            <TextView
+                android:id="@+id/tv_distance1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FD8C2A"
+                android:textSize="40sp"
+                android:text="0.00"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#BCC6D0"
+                android:textSize="15sp"
+                android:text="距离(公里)"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                />
+
+            <View
+                android:layout_marginTop="15dp"
+                style="@style/set_item_Line_hor"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_speed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#333333"
+                        android:textSize="15sp"
+                        android:text="0'0'"
+                        android:layout_gravity="center_horizontal"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#BCC6D0"
+                        android:textSize="15sp"
+                        android:text="配速"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        />
+                </LinearLayout>
+
+                <View
+                    style="@style/set_item_Line_ver"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <Chronometer
+                        android:id ="@+id/chronometer1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:format="%s"
+                        android:textSize="15sp"
+                        android:textColor="#333333"
+                        android:layout_gravity="center_horizontal"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#BCC6D0"
+                        android:textSize="15sp"
+                        android:text="时长"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        />
+                </LinearLayout>
+
+                <View
+                    style="@style/set_item_Line_ver"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_kcal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#333333"
+                        android:textSize="15sp"
+                        android:text="0"
+                        android:layout_gravity="center_horizontal"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#BCC6D0"
+                        android:textSize="15sp"
+                        android:text="卡路里"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                style="@style/set_item_Line_hor"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:orientation="vertical"
+                android:background="@color/all_bg"
+                android:padding="20dp"
+                >
+
+
+                <Button
+                    android:id="@+id/btn_stop"
+                    android:layout_width="150dp"
+                    android:layout_height="45dp"
+                    android:text="暂停"
+                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_button_red"
+                    android:padding="10dp"
+                    android:layout_gravity="center_horizontal"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/ll_operate"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+
+                    <Button
+                        android:id="@+id/btn_continue"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:text="继续"
+                        android:textSize="15sp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_blue"
+                        android:layout_marginRight="10dp"
+                        android:padding="10dp"
+
+                        />
+
+                    <Button
+                        android:id="@+id/btn_end"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp"
+                        android:text="结束"
+                        android:textSize="15sp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_red"
+                        android:layout_marginLeft="10dp"
+                        android:padding="10dp"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/all_bg"
+            >
+
+            <LinearLayout
+                android:id="@+id/ll_full"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:background="#FFFFFF"
+                android:visibility="invisible"
+                >
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_distance2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#333333"
+                        android:textSize="25sp"
+                        android:text="0.00"
+                        android:layout_gravity="center_horizontal"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#BCC6D0"
+                        android:textSize="15sp"
+                        android:text="距离(公里)"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        />
+                </LinearLayout>
+
+                <View
+                    style="@style/set_item_Line_ver"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <Chronometer
+                        android:id ="@+id/chronometer2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:format="%s"
+                        android:textSize="25sp"
+                        android:textColor="#333333"
+                        android:layout_gravity="center_horizontal"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#BCC6D0"
+                        android:textSize="15sp"
+                        android:text="时长"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="5dp"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
