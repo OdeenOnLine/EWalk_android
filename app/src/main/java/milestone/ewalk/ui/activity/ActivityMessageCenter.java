@@ -135,6 +135,8 @@ public class ActivityMessageCenter extends ActivityBase{
                                 isLastPage = true;
                             }
                             adapter.notifyDataSetChanged();
+                            ActivityMain.hasNewMsg = false;
+                            spUtil.setMESSAGE_TIME(new Date().getTime()/1000+"");
                         }else if(jsonObject.optInt("retNum")==2016){
                             Util.Tip(mContext,jsonObject.optString("retMsg"));
                             stopService(ActivityMain.service);

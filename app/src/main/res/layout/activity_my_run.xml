@@ -43,6 +43,7 @@
             android:paddingLeft="10dp"
             android:layout_alignParentRight="true"
             android:gravity="center_vertical"
+            android:visibility="gone"
             />
 
     </RelativeLayout>

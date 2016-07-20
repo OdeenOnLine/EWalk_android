@@ -76,7 +76,8 @@ public class RankAdapter extends BaseAdapter {
             viewHolder.tv_name =  (TextView)convertView.findViewById(R.id.tv_name);
             viewHolder.tv_my_team = (TextView) convertView.findViewById(R.id.tv_my_team);
             viewHolder.tv_core = (TextView) convertView.findViewById(R.id.tv_core);
-
+            viewHolder.tv_company_name = (TextView) convertView.findViewById(R.id.tv_company_name);
+            viewHolder.tv_wanbu = (TextView) convertView.findViewById(R.id.tv_wanbu);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -114,14 +115,16 @@ public class RankAdapter extends BaseAdapter {
         }
 
         if(type==1){
-            viewHolder.iv_poster.setVisibility(View.VISIBLE);
-            ImageLoader.getInstance().displayImage(rankBean.getPoster(),viewHolder.iv_poster);
-        }else{
-            viewHolder.iv_poster.setVisibility(View.GONE);
-        }
-        viewHolder.tv_name.setText(rankBean.getName());
-        viewHolder.tv_core.setText(rankBean.getSteps()+"");
+            viewHolder.tv_company_name.setVisibility(View.VISIBLE);
 
+        }else{
+            viewHolder.tv_company_name.setVisibility(View.GONE);
+        }
+        ImageLoader.getInstance().displayImage(rankBean.getPoster(),viewHolder.iv_poster);
+        viewHolder.tv_name.setText(rankBean.getName());
+        viewHolder.tv_company_name.setText(rankBean.getCompanyName());
+        viewHolder.tv_core.setText(rankBean.getSteps()+"");
+        viewHolder.tv_wanbu.setText("万步率:"+rankBean.getWanbu()*100 +"%");
         return convertView;
 	}
 
@@ -131,8 +134,9 @@ public class RankAdapter extends BaseAdapter {
         private TextView tv_rank;
         private CircularImage iv_poster;
         private TextView tv_name;
+        private TextView tv_company_name;
         private TextView tv_my_team;
         private TextView tv_core;
-
+        private TextView tv_wanbu;
 	}
 }

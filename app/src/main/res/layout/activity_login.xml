@@ -82,6 +82,26 @@
         android:layout_weight="1"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="主办单位：国网江西省电力公司工会"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="本地服务：南昌科源电子电脑有限公司"
+        android:textSize="15sp"
+        android:textColor="#333333"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal"
+        />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

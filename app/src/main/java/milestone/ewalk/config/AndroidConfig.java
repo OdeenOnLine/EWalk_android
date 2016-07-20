@@ -52,4 +52,9 @@ public class AndroidConfig {
 
     //意见反馈
     public static String FeedBack = "feedBack";
+
+    //是否有新消息
+    public static String HasNewMsg = "hasNewMsg";
+
+
 }

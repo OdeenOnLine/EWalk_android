@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF">
+    android:background="#F2F2F2">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,57 +26,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="历史记录"
+            android:text="公司个人排行"
             android:textColor="#000000"
             android:textSize="20sp"
             android:layout_centerInParent="true"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="统计"
-            android:textColor="@color/my_blue"
-            android:textSize="18sp"
-            android:layout_centerInParent="true"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            />
 
     </RelativeLayout>
 
     <View
         style="@style/set_item_Line_hor"/>
 
-
-
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/lv_record"
+        android:id="@+id/lv_rank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
         android:divider="@null"
         android:listSelector="@android:color/transparent"
         ptr:ptrMode="pullUpFromBottom"
         />
-
-    <LinearLayout
-        android:layout_width="8dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginLeft="15dp"
-        android:gravity="center_horizontal"
-        >
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#F0F0F2"
-            />
-
-
-    </LinearLayout>
 
 </LinearLayout>

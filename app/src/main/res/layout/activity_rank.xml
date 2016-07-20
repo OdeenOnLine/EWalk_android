@@ -197,13 +197,31 @@
             />
 
 
-        <TextView
-            android:id="@+id/tv_name"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            />
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                />
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/tv_my_team"
@@ -218,17 +236,35 @@
             android:visibility="gone"
             />
 
-        <TextView
-            android:id="@+id/tv_core"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:layout_marginRight="10dp"
+            android:orientation="vertical"
             android:gravity="right"
+            android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"
-            />
+            >
+
+            <TextView
+                android:id="@+id/tv_core"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:gravity="right"
+                />
+
+            <TextView
+                android:id="@+id/tv_wanbu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:layout_marginTop="5dp"
+                android:gravity="right"
+                />
+        </LinearLayout>
 
 
     </LinearLayout>

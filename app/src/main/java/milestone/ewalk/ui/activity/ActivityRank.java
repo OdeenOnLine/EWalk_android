@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -46,7 +47,7 @@ import milestone.ewalk.widget.CircularImage;
 public class ActivityRank extends ActivityBase{
     private CircularImage iv_poster;
     private ImageView iv_rank;
-    private TextView tv_rank,tv_name,tv_core;
+    private TextView tv_rank,tv_name,tv_core,tv_company_name,tv_wanbu;
     private TextView tv_my_team;
     private PullToRefreshListView lv_rank;
     private RankAdapter rankAdapter;
@@ -93,6 +94,8 @@ public class ActivityRank extends ActivityBase{
         tv_rank = (TextView) findViewById(R.id.tv_rank);
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_core = (TextView) findViewById(R.id.tv_core);
+        tv_company_name = (TextView) findViewById(R.id.tv_company_name);
+        tv_wanbu = (TextView) findViewById(R.id.tv_wanbu);
         tv_team = (TextView) findViewById(R.id.tv_team);
         tv_team.setOnClickListener(this);
         tv_today = (TextView) findViewById(R.id.tv_today);
@@ -116,6 +119,18 @@ public class ActivityRank extends ActivityBase{
                     currentPage++;
                     isMore = true;
                     rankInfoTask();
+                }
+            }
+        });
+        lv_rank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(type == 2){
+                    Util.Log("ltf","i==================="+i);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("companyId",rankBeans.get(i-1).getCompanyId());
+                    bundle.putInt("addition",currIndex+1);
+                    startA(ActivityCompanyRank.class,bundle,false,true,false);
                 }
             }
         });
@@ -182,6 +197,7 @@ public class ActivityRank extends ActivityBase{
                             if(!isMore){
                                 rankBeans.clear();
                                 myRank = jsonObject.optInt("rank");
+                                rankAdapter.setMyRank(myRank);
                                 if(myRank==1){
                                     iv_rank.setImageResource(R.drawable.icon_rank_first);
                                     iv_rank.setVisibility(View.VISIBLE);
@@ -201,7 +217,14 @@ public class ActivityRank extends ActivityBase{
                                 }
                                 ImageLoader.getInstance().displayImage(jsonObject.optString("poster"),iv_poster);
                                 tv_name.setText(jsonObject.optString("name"));
+                                if(type ==2){
+                                    tv_company_name.setVisibility(View.GONE);
+                                }else {
+                                    tv_company_name.setVisibility(View.VISIBLE);
+                                    tv_company_name.setText(jsonObject.optString("company"));
+                                }
                                 tv_core.setText(jsonObject.optInt("steps")+"");
+                                tv_wanbu.setText("万步率:"+jsonObject.optInt("wanbu")*100 +"%");
                             }
 
                             JSONArray jsonArray = jsonObject.getJSONArray("rankList");
@@ -311,7 +334,7 @@ public class ActivityRank extends ActivityBase{
                     tv_person.setTextColor(Color.parseColor("#62D4D9"));
                     tv_team.setBackgroundResource(R.drawable.bg_button_blue);
                     tv_team.setTextColor(Color.parseColor("#FFFFFF"));
-                    iv_poster.setVisibility(View.GONE);
+                    iv_poster.setVisibility(View.VISIBLE);
                     tv_my_team.setVisibility(View.VISIBLE);
 
                     isMore = false;

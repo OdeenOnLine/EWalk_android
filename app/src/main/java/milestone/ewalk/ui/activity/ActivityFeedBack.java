@@ -104,6 +104,8 @@ public class ActivityFeedBack extends ActivityBase{
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else {
+                    Util.Tip(mContext, "上传失败");
                 }
             }
         }.execute() ;

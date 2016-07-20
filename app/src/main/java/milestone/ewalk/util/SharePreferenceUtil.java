@@ -20,6 +20,9 @@ public class SharePreferenceUtil {
 	// 密码
 	private String PASSWORD = "password";
 
+    // 最新消息时间
+    private String MESSAGE_TIME = "message_time";
+
 	public void setUSERNAME(String value) {
 		editor.putString(USERNAME, value);
 		editor.commit();
@@ -37,6 +40,15 @@ public class SharePreferenceUtil {
 	public String getPASSWORD() {
 		return mSharedPreferences.getString(PASSWORD, "");
 	}
+
+    public void setMESSAGE_TIME(String message_time) {
+        editor.putString(MESSAGE_TIME, message_time);
+        editor.commit();
+    }
+
+    public String getMESSAGE_TIME() {
+        return mSharedPreferences.getString(MESSAGE_TIME, "0");
+    }
 
 
 }

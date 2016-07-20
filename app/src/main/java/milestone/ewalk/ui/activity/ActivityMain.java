@@ -74,9 +74,10 @@ public class ActivityMain extends ActivityBase{
     private int averageStep = 0;
     private ImageView iv_walk_line,iv_average_line;
     private Timer timer;
-    private CircularImage iv_rank_hint;
+    private CircularImage iv_rank_hint,iv_message_hint;
 
     private NewsBrocastReceiver brocastReceiver;
+    public static boolean hasNewMsg = false;
 
     class NewsBrocastReceiver extends BroadcastReceiver {
 
@@ -129,6 +130,7 @@ public class ActivityMain extends ActivityBase{
         iv_walk_line = (ImageView) findViewById(R.id.iv_walk_line);
         iv_average_line = (ImageView) findViewById(R.id.iv_average_line);
         iv_rank_hint = (CircularImage) findViewById(R.id.iv_rank_hint);
+        iv_message_hint = (CircularImage) findViewById(R.id.iv_message_hint);
     }
 
     private void initData() {
@@ -160,6 +162,8 @@ public class ActivityMain extends ActivityBase{
         }
 
         getMessageTask();
+        getHintTask();
+
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -179,13 +183,18 @@ public class ActivityMain extends ActivityBase{
     @Override
     protected void onResume() {
         super.onResume();
-
+        if(hasNewMsg){
+            iv_message_hint.setImageResource(R.color.my_red);;
+            iv_message_hint.setVisibility(View.VISIBLE);
+        }else{
+            iv_message_hint.setVisibility(View.GONE);
+        }
     }
 
 
 
     private void initTodayMessage() {
-        step = (int) StepCounterService.dayDetector;
+        step = (int) StepCounterService.mDetector;
         if(steps!=null){
             step += Integer.parseInt(steps[steps.length-1]);
         }
@@ -320,6 +329,78 @@ public class ActivityMain extends ActivityBase{
         return jsonData;
     }
 
+
+    /**
+     * 新建异步任务获取是否有新消息
+     */
+    private void getHintTask() {
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected void onPreExecute() {
+                showLoadingDialog();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                return getHint();		//封装参数
+            }
+
+            @Override
+            protected void onPostExecute(String jsonData) {
+                hideLoadingDialog();
+                try {
+                    if(jsonData!=null) {
+                        JSONObject jsonObject = new JSONObject(jsonData);
+                        if(jsonObject.optInt("retNum")==0) {
+                            hasNewMsg = jsonObject.optBoolean("hasNew");
+                            if(hasNewMsg){
+                                iv_message_hint.setImageResource(R.color.my_red);;
+                                iv_message_hint.setVisibility(View.VISIBLE);
+                            }else{
+                                iv_message_hint.setVisibility(View.GONE);
+                            }
+
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }.execute() ;
+    }
+
+
+
+    /**
+     * 获取是否有新消息
+     */
+    private String getHint() {
+        ArrayList<PropertyInfo> proInfoList = new ArrayList<PropertyInfo>();
+        PropertyInfo proInfo = new PropertyInfo();
+        proInfo.setName("token");
+        proInfo.setValue(userBean.getToken());
+        proInfoList.add(proInfo);
+
+        proInfo = new PropertyInfo();
+        proInfo.setName("time");
+        String time = spUtil.getMESSAGE_TIME();
+        proInfo.setValue(time);
+        proInfoList.add(proInfo);
+
+
+        String jsonData = ConnectWebservice.getInStance().connectEwalk
+                (
+                        AndroidConfig.HasNewMsg,
+                        proInfoList
+                );
+
+        return jsonData;
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -436,7 +517,6 @@ public class ActivityMain extends ActivityBase{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("ltf","strBuffer=========="+strBuffer);
         proInfo = new PropertyInfo();
         proInfo.setName("steps");
         proInfo.setValue(strBuffer);

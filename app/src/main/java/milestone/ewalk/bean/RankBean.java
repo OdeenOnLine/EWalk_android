@@ -9,10 +9,13 @@ import milestone.ewalk.exception.NetRequestException;
  * Created by ltf on 2016/7/11.
  */
 public class RankBean extends BaseBean{
+    private int companyId;
     private String name;
+    private String companyName;
     private String poster;
     private int rank;
     private int steps;
+    private int wanbu;
 
     @Override
     public JSONObject toJSON() {
@@ -21,10 +24,13 @@ public class RankBean extends BaseBean{
 
     @Override
     public Object parseJSON(JSONObject jsonObj) throws NetRequestException {
+        companyId = jsonObj.optInt("companyId");
         name = jsonObj.optString("name");
+        companyName = jsonObj.optString("companyName");
         poster = jsonObj.optString("poster");
         rank = jsonObj.optInt("rank");
         steps = jsonObj.optInt("steps");
+        wanbu = jsonObj.optInt("wanbu");
         return this;
     }
 
@@ -58,5 +64,29 @@ public class RankBean extends BaseBean{
 
     public void setSteps(int steps) {
         this.steps = steps;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public int getWanbu() {
+        return wanbu;
+    }
+
+    public void setWanbu(int wanbu) {
+        this.wanbu = wanbu;
+    }
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
     }
 }

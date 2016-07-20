@@ -52,8 +52,8 @@ public class StepCounterService extends Service implements SensorEventListener{
     public static Boolean isRankUpdate = true;// 排行榜更新
 
     private SensorManager mSensorManager;// 传感器服务
-    private PowerManager mPowerManager;// 电源管理服务
-    private PowerManager.WakeLock mWakeLock;// 屏幕灯
+//    private PowerManager mPowerManager;// 电源管理服务
+//    private PowerManager.WakeLock mWakeLock;// 屏幕灯
 
     private Sensor mStepCount;
     private Sensor mStepDetector;
@@ -100,12 +100,12 @@ public class StepCounterService extends Service implements SensorEventListener{
         mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
         mStepCount = mSensorManager.getDefaultSensor(sensorTypeC);
         mStepDetector = mSensorManager.getDefaultSensor(sensorTypeD);
-        // 电源管理服务
-        mPowerManager = (PowerManager) this
-                .getSystemService(Context.POWER_SERVICE);
-        mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK
-                | PowerManager.ACQUIRE_CAUSES_WAKEUP, "S");
-        mWakeLock.acquire();
+//        // 电源管理服务
+//        mPowerManager = (PowerManager) this
+//                .getSystemService(Context.POWER_SERVICE);
+//        mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK
+//                | PowerManager.ACQUIRE_CAUSES_WAKEUP, "S");
+//        mWakeLock.acquire();
         register();
 
         Calendar c = Calendar.getInstance();
@@ -190,11 +190,16 @@ public class StepCounterService extends Service implements SensorEventListener{
         }
         if (event.sensor.getType()==sensorTypeD) {
             if (event.values[0]==1.0) {
-                mDetector++;
-                dayDetector++;
-                if(startTime==0){
-                    startTime = System.currentTimeMillis();
+                Calendar calendar = Calendar.getInstance();
+                int hour=calendar.get(Calendar.HOUR_OF_DAY);
+                if(hour>= 6 && hour < 23) {
+                    mDetector++;
+                    dayDetector++;
+                    if(startTime==0){
+                        startTime = System.currentTimeMillis();
+                    }
                 }
+
             }
         }
     }
@@ -319,9 +324,9 @@ public class StepCounterService extends Service implements SensorEventListener{
             timer.cancel();
             timer =null;
         }
-        if (mWakeLock != null) {
-            mWakeLock.release();
-        }
+//        if (mWakeLock != null) {
+//            mWakeLock.release();
+//        }
 
 
         Intent intent = new Intent();

@@ -30,6 +30,7 @@ import milestone.ewalk.exception.NetRequestException;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.ActivityBase;
 import milestone.ewalk.util.Util;
+import milestone.ewalk.widget.CircularImage;
 
 /**
  * 我的信息
@@ -47,6 +48,7 @@ public class ActivityMine extends ActivityBase{
     private UserBean userBean;
     private static final int PIC_Select_POSTER_ImageFromLocal = 2;// 头像相册取图
     private int step=0;
+    private CircularImage iv_message_hint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,7 @@ public class ActivityMine extends ActivityBase{
 
     private void initView() {
         iv_poster = (ImageView) findViewById(R.id.iv_poster);
-        iv_poster.setImageResource(R.drawable.ic_launcher);
+        iv_poster.setImageResource(R.drawable.icon_default_poster);
         iv_poster.setOnClickListener(this);
         iv_switch = (ImageView) findViewById(R.id.iv_switch);
         iv_switch.setOnClickListener(this);
@@ -81,8 +83,19 @@ public class ActivityMine extends ActivityBase{
         ll_pwd_change.setOnClickListener(this);
         ll_message_center = (LinearLayout) findViewById(R.id.ll_message_center);
         ll_message_center.setOnClickListener(this);
-
+        iv_message_hint = (CircularImage) findViewById(R.id.iv_message_hint);
         personInfoTask();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(ActivityMain.hasNewMsg){
+            iv_message_hint.setImageResource(R.color.my_red);;
+            iv_message_hint.setVisibility(View.VISIBLE);
+        }else{
+            iv_message_hint.setVisibility(View.GONE);
+        }
     }
 
 
