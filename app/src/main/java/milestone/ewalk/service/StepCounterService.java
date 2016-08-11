@@ -142,6 +142,7 @@ public class StepCounterService extends Service implements SensorEventListener{
             public void run() {
                 isRankUpdate = true;
                 dayDetector = 0;
+                mDetector = 0;
                 startTime=0;
             }
         },initDelay,24*60*60*1000);
@@ -228,7 +229,7 @@ public class StepCounterService extends Service implements SensorEventListener{
             bw.write(new Date().getTime()/1000+","+(int)nowStep+","+distance+","+kcal);
             bw.newLine();
             bw.close();
-            StepCounterService.mDetector -= nowStep;
+            mDetector -= nowStep;
 
             uploadStepTask();
         } catch (FileNotFoundException e) {
@@ -263,6 +264,7 @@ public class StepCounterService extends Service implements SensorEventListener{
                         JSONObject jsonObject = new JSONObject(jsonData);
                         if (jsonObject.optString("retNum").equals("0")) {
                             file.delete();
+                            dayDetector = 0;
                             sendBroadcast(new Intent("StepRefresh"));
                         }
                     } catch (JSONException e) {

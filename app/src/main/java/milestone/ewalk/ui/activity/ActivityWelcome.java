@@ -8,6 +8,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import milestone.ewalk.R;
+import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.ui.ActivityBase;
 
 /**
@@ -22,7 +23,7 @@ public class ActivityWelcome extends ActivityBase{
         setContentView(R.layout.activity_welcome);
         web_view = (WebView) findViewById(R.id.web_view);
         web_view.setWebViewClient(new webViewClient());
-        web_view.loadUrl("http://120.76.41.254:8080/kyweb_oracle/splash.action");
+        web_view.loadUrl(AndroidConfig.ip_address+"/kyweb_oracle/splash.action");
         WebSettings webSettings1=web_view.getSettings();
         webSettings1.setJavaScriptEnabled(true);
         webSettings1.setSupportZoom(true);

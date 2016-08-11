@@ -4,9 +4,9 @@ package milestone.ewalk.config;
  * Created by ltf on 2016/6/17.
  */
 public class AndroidConfig {
-    public static String ip_address = "http://120.76.41.254:8080"; // 接口服务器IP地址
+//    public static String ip_address = "http://192.168.1.138:8080"; // 接口服务器IP地址
 
-//    public static String ip_address = "http://120.76.41.254:8080"; // 正式服务器IP地址
+    public static String ip_address = "http://120.76.41.254:8080"; // 正式服务器IP地址
 
     //管理员登录
     public static String LoginAsAdmin = "loginAsAdmin";

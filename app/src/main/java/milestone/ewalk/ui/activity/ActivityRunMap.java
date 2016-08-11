@@ -445,7 +445,7 @@ public class ActivityRunMap extends ActivityBase{
             if(pointList.size()>=2){
                 distance += DistanceUtil. getDistance(pointList.get(pointList.size()-2), latLng);
                 //取2位小数四舍五入
-                distance = BigDecimalUtil.doubleChange(distance/1000, 2);
+                distance = BigDecimalUtil.doubleChange(distance/1000, 3);
 
                 calory = Util.getCalory(userBean.getWeight(),distance);
                 calory = BigDecimalUtil.doubleChange(calory, 0);

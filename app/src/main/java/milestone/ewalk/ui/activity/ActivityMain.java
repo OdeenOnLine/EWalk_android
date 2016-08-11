@@ -184,7 +184,7 @@ public class ActivityMain extends ActivityBase{
     protected void onResume() {
         super.onResume();
         if(hasNewMsg){
-            iv_message_hint.setImageResource(R.color.my_red);;
+            iv_message_hint.setImageResource(R.color.my_red);
             iv_message_hint.setVisibility(View.VISIBLE);
         }else{
             iv_message_hint.setVisibility(View.GONE);
@@ -194,7 +194,7 @@ public class ActivityMain extends ActivityBase{
 
 
     private void initTodayMessage() {
-        step = (int) StepCounterService.mDetector;
+        step = (int) StepCounterService.dayDetector;
         if(steps!=null){
             step += Integer.parseInt(steps[steps.length-1]);
         }
