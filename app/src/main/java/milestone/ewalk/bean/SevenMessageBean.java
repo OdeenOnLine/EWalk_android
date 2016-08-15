@@ -14,6 +14,7 @@ public class SevenMessageBean extends BaseBean {
     private String[] steps;
     private double today_mile;
     private long today_last;
+    private String todayDuration;
 
     @Override
     public JSONObject toJSON() {
@@ -33,6 +34,7 @@ public class SevenMessageBean extends BaseBean {
         }
         today_mile = jsonObj.optDouble("todayMile");
         today_last = jsonObj.optLong("todayLast");
+        todayDuration = jsonObj.optString("todayDuration");
         return this;
     }
 
@@ -58,5 +60,13 @@ public class SevenMessageBean extends BaseBean {
 
     public void setToday_last(long today_last) {
         this.today_last = today_last;
+    }
+
+    public String getTodayDuration() {
+        return todayDuration;
+    }
+
+    public void setTodayDuration(String todayDuration) {
+        this.todayDuration = todayDuration;
     }
 }

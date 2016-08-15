@@ -177,7 +177,7 @@ public class ActivityMain extends ActivityBase{
                 });
 
             }
-        },new Date(),10*1000);
+        },new Date(),5*1000);
     }
 
     @Override
@@ -195,6 +195,7 @@ public class ActivityMain extends ActivityBase{
 
     private void initTodayMessage() {
         step = (int) StepCounterService.dayDetector;
+
         if(steps!=null){
             step += Integer.parseInt(steps[steps.length-1]);
         }
@@ -269,20 +270,29 @@ public class ActivityMain extends ActivityBase{
      * 显示历史信息
      */
     private void initMessage() {
-        String[] titlesArray = sevenMessageBean.getSteps();
+//        String[] titlesArray = sevenMessageBean.getSteps();
+        int[] titlesArray = new int[7];
         steps = sevenMessageBean.getSteps();
         int dayStep1 = Integer.parseInt(steps[0]);
+        titlesArray[0] = dayStep1;
         int dayStep2 = Integer.parseInt(steps[1]);
+        titlesArray[1] = dayStep2;
         int dayStep3 = Integer.parseInt(steps[2]);
+        titlesArray[2] = dayStep3;
         int dayStep4 = Integer.parseInt(steps[3]);
+        titlesArray[3] = dayStep4;
         int dayStep5 = Integer.parseInt(steps[4]);
+        titlesArray[4] = dayStep5;
         int dayStep6 = Integer.parseInt(steps[5]);
+        titlesArray[5] = dayStep6;
         int dayStep7 = Integer.parseInt(steps[6]);
+        titlesArray[6] = dayStep7;
         averageStep = (dayStep1+dayStep2+dayStep3+dayStep4+dayStep5+dayStep6+dayStep7)/7;
         tv_average_step.setText("平均"+averageStep+"步");
         if(averageStep!=0){
             Arrays.sort(titlesArray);
-            int maxStep = Integer.parseInt(steps[6]);
+            int maxStep = titlesArray[6];
+
             progress1.setCurrentCount(dayStep1*100/maxStep);
             progress2.setCurrentCount(dayStep2*100/maxStep);
             progress3.setCurrentCount(dayStep3*100/maxStep);
@@ -300,7 +310,8 @@ public class ActivityMain extends ActivityBase{
         int h= (int) (time/3600);
         int m= (int) ((time-h*3600)/60);
         int s= (int) ((time-h*3600)%60);
-        tv_time.setText(h + "时"+m + "分");
+//        tv_time.setText(h + "时"+m + "分");
+        tv_time.setText(sevenMessageBean.getTodayDuration());
         initTodayMessage();
     }
 
@@ -408,11 +419,11 @@ public class ActivityMain extends ActivityBase{
                 iv_rank_hint.setVisibility(View.GONE);
                 StepCounterService.isRankUpdate = false;
                 float nowStep = StepCounterService.mDetector;
-                if(nowStep!=0) {
+//                if(nowStep!=0) {
                     saveDataToCSV(nowStep);
-                }else {
-                    startA(ActivityRank.class, false, true);
-                }
+//                }else {
+//                    startA(ActivityRank.class, false, true);
+//                }
 //                file = new File(path + "/steps.csv");
 //                uploadStepTask();
                 break;
@@ -444,16 +455,18 @@ public class ActivityMain extends ActivityBase{
                 file.createNewFile();//创建文件
             }
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
-            // 添加新的数据行
+            if(nowStep!=0) {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
+                // 添加新的数据行
 //            bw.write("\"李四\"" + "," + "\"1988\"" + "," + "\"1992\"");
-            double distance  = nowStep * 0.55/1000;
-            double kcal = Util.getCalory(userBean.getWeight(),distance);
-            kcal = BigDecimalUtil.doubleChange(kcal,0);
-            bw.write(new Date().getTime()/1000+","+(int)nowStep+","+distance+","+kcal);
-            bw.newLine();
-            bw.close();
-            StepCounterService.mDetector -= nowStep;
+                double distance = nowStep * 0.55 / 1000;
+                double kcal = Util.getCalory(userBean.getWeight(), distance);
+                kcal = BigDecimalUtil.doubleChange(kcal, 0);
+                bw.write(new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
+                bw.newLine();
+                bw.close();
+                StepCounterService.mDetector -= nowStep;
+            }
 
             uploadStepTask();
         } catch (FileNotFoundException e) {
@@ -483,12 +496,15 @@ public class ActivityMain extends ActivityBase{
 
             @Override
             protected void onPostExecute(String jsonData) {
+                Util.Log("ltf","jsonData==========upload======"+jsonData);
                 hideLoadingDialog();
                 if(jsonData!=null){
+
                     try {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         if (jsonObject.optString("retNum").equals("0")) {
                             file.delete();
+                            StepCounterService.dayDetector = 0;
                             sendBroadcast(new Intent("StepRefresh"));
                         }
                     } catch (JSONException e) {

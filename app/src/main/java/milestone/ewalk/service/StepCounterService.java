@@ -126,9 +126,9 @@ public class StepCounterService extends Service implements SensorEventListener{
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if(mDetector!=0) {
+//                    if(mDetector!=0) {
                         saveDataToCSV(mDetector);
-                    }
+//                    }
                 }
             }, (58 - minute)*60*1000, 60*60 * 1000);
         }
@@ -219,18 +219,19 @@ public class StepCounterService extends Service implements SensorEventListener{
             if(!file.exists()){//判断文件是否存在（不存在则创建这个文件）
                 file.createNewFile();//创建文件
             }
+            if(mDetector!=0) {
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
-            // 添加新的数据行
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
+                // 添加新的数据行
 //            bw.write("\"李四\"" + "," + "\"1988\"" + "," + "\"1992\"");
-            double distance  = nowStep * 0.55/1000;
-            double kcal = Util.getCalory(userBean.getWeight(),distance);
-            kcal = BigDecimalUtil.doubleChange(kcal, 0);
-            bw.write(new Date().getTime()/1000+","+(int)nowStep+","+distance+","+kcal);
-            bw.newLine();
-            bw.close();
-            mDetector -= nowStep;
-
+                double distance = nowStep * 0.55 / 1000;
+                double kcal = Util.getCalory(userBean.getWeight(), distance);
+                kcal = BigDecimalUtil.doubleChange(kcal, 0);
+                bw.write(new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
+                bw.newLine();
+                bw.close();
+                mDetector -= nowStep;
+            }
             uploadStepTask();
         } catch (FileNotFoundException e) {
             // File对象的创建过程中的异常捕获

@@ -29,6 +29,7 @@ import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.exception.NetRequestException;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.ActivityBase;
+import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
 
@@ -154,7 +155,9 @@ public class ActivityMine extends ActivityBase{
         tv_step.setText(step+"步");
         tv_mile.setText(userBean.getRecord()+"公里");
         tv_points.setText(userBean.getPoints()+"积分");
-        tv_kcal.setText(userBean.getCalory()+"千卡");
+        double kcal = Util.getCalory(userBean.getWeight(), userBean.getRecord());
+        kcal = BigDecimalUtil.doubleChange(kcal, 0);
+        tv_kcal.setText(kcal+"千卡");
     }
 
     private String personInfo() {

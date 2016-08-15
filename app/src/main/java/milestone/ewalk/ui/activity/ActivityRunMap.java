@@ -127,6 +127,7 @@ public class ActivityRunMap extends ActivityBase{
     private int temp=0;
     private double calory=0;
     private TextView tv_kcal,tv_speed;
+    double myDistance=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -442,24 +443,26 @@ public class ActivityRunMap extends ActivityBase{
             }
 
             pointList.add(latLng);
-            if(pointList.size()>=2){
-                distance += DistanceUtil. getDistance(pointList.get(pointList.size()-2), latLng);
-                //取2位小数四舍五入
-                distance = BigDecimalUtil.doubleChange(distance/1000, 3);
 
-                calory = Util.getCalory(userBean.getWeight(),distance);
-                calory = BigDecimalUtil.doubleChange(calory, 0);
-            }
 
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    tv_distance1.setText(distance+"");
-                    tv_distance2.setText(distance+"");
+
+                    if(pointList.size()>=2){
+
+                        distance += Math.abs(DistanceUtil. getDistance(pointList.get(pointList.size()-2), pointList.get(pointList.size()-1)));
+                        //取2位小数四舍五入
+                        myDistance = BigDecimalUtil.doubleChange(distance/1000, 3);
+                        calory = Util.getCalory(userBean.getWeight(),myDistance);
+                        calory = BigDecimalUtil.doubleChange(calory, 0);
+                    }
+                    tv_distance1.setText(myDistance+"");
+                    tv_distance2.setText(myDistance+"");
                     tv_kcal.setText(calory+"");
-                    if(distance!=0) {
-                        int time = (int) (temp / distance);
+                    if(myDistance!=0) {
+                        int time = (int) (temp / myDistance);
                         tv_speed.setText(time/60+"'"+time%60+"\"");
                     }
 
@@ -649,7 +652,7 @@ public class ActivityRunMap extends ActivityBase{
 
         proInfo = new PropertyInfo();
         proInfo.setName("mile");
-        proInfo.setValue(distance+"");
+        proInfo.setValue(myDistance+"");
         proInfoList.add(proInfo);
 
         proInfo = new PropertyInfo();
