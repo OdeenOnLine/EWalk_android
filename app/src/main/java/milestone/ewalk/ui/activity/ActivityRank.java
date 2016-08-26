@@ -37,6 +37,7 @@ import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.exception.NetRequestException;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.ActivityBase;
+import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
 
@@ -71,6 +72,10 @@ public class ActivityRank extends ActivityBase{
     private Handler handler = new Handler();
     private int pageSize=10;
     private int companyId=0;
+    private LinearLayout ll_mine;
+
+    private int step = 0;
+    private int myCompanyId = 0;
 
 
     @Override
@@ -126,16 +131,23 @@ public class ActivityRank extends ActivityBase{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(type == 2){
-                    Util.Log("ltf","i==================="+i);
                     Bundle bundle = new Bundle();
                     bundle.putInt("companyId",rankBeans.get(i-1).getCompanyId());
                     bundle.putInt("addition",currIndex+1);
+                    bundle.putInt("step", step);
+                    if(myCompanyId ==rankBeans.get(i-1).getCompanyId() ) {
+                        bundle.putBoolean("mine", true);
+                    }else{
+                        bundle.putBoolean("mine", false);
+                    }
                     startA(ActivityCompanyRank.class,bundle,false,true,false);
                 }
             }
         });
         rankAdapter = new RankAdapter(ActivityRank.this,rankBeans,type);
         lv_rank.setAdapter(rankAdapter);
+        ll_mine = (LinearLayout) findViewById(R.id.ll_mine);
+        ll_mine.setOnClickListener(this);
     }
 
     Runnable myRunnar = new Runnable() {
@@ -166,6 +178,7 @@ public class ActivityRank extends ActivityBase{
     }
 
     private void initData() {
+        step = getIntent().getIntExtra("step",0);
         rankInfoTask();
     }
 
@@ -224,7 +237,8 @@ public class ActivityRank extends ActivityBase{
                                     tv_company_name.setText(jsonObject.optString("company"));
                                 }
                                 tv_core.setText(jsonObject.optInt("steps")+"");
-                                tv_wanbu.setText("万步率:"+jsonObject.optInt("wanbu")*100 +"%");
+                                tv_wanbu.setText("万步率:"+ BigDecimalUtil.doubleChange(jsonObject.optDouble("wanbu")*100,2) +"%");
+                                myCompanyId = jsonObject.optInt("companyId");
                             }
 
                             JSONArray jsonArray = jsonObject.getJSONArray("rankList");
@@ -341,6 +355,20 @@ public class ActivityRank extends ActivityBase{
                     currentPage = 1;
                     isLastPage = false;
                     rankInfoTask();
+                }
+                break;
+            case R.id.ll_mine:
+                if(type==1) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("step", step);
+                    startA(ActivityMine.class, bundle, false, true, false);
+                }else{
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("companyId",myCompanyId);
+                    bundle.putInt("addition",currIndex+1);
+                    bundle.putInt("step", step);
+                    bundle.putBoolean("mine",true);
+                    startA(ActivityCompanyRank.class, bundle, false, true, false);
                 }
                 break;
         }

@@ -68,7 +68,7 @@ public class StepCounterService extends Service implements SensorEventListener{
     private String path = Environment.getExternalStorageDirectory().getPath()+ "/eWalk";
     private File file;
     public static float dayDetector;//当天步数
-    public static float startTime=0;
+    public static long startTime=0;
 
 
     @Override
@@ -110,18 +110,18 @@ public class StepCounterService extends Service implements SensorEventListener{
 
         Calendar c = Calendar.getInstance();
         final int minute = c.get(Calendar.MINUTE);
-        if(minute>=58){
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    Util.Log("ltf","user==="+userBean.getToken());
-                    if(mDetector!=0) {
-                        saveDataToCSV(mDetector);
-                    }
-                }
-            },new Date(), 60*60 * 1000);
-        }else {
+//        if(minute>=58){
+//            timer = new Timer();
+//            timer.schedule(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    Util.Log("ltf","user==="+userBean.getToken());
+//                    if(mDetector!=0) {
+//                        saveDataToCSV(mDetector);
+//                    }
+//                }
+//            },new Date(), 60*60 * 1000);
+//        }else {
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -130,8 +130,8 @@ public class StepCounterService extends Service implements SensorEventListener{
                         saveDataToCSV(mDetector);
 //                    }
                 }
-            }, (58 - minute)*60*1000, 60*60 * 1000);
-        }
+            }, (60 - minute)*60*1000, 60*60 * 1000);
+//        }
 
         long oneDay = 24 * 60 * 60 * 1000;
         long initDelay  = getTimeMillis("00:00:00") - System.currentTimeMillis();
@@ -143,7 +143,6 @@ public class StepCounterService extends Service implements SensorEventListener{
                 isRankUpdate = true;
                 dayDetector = 0;
                 mDetector = 0;
-                startTime=0;
             }
         },initDelay,24*60*60*1000);
     }
@@ -188,20 +187,30 @@ public class StepCounterService extends Service implements SensorEventListener{
 
         if (event.sensor.getType()==sensorTypeC) {
             mCount = event.values[0];
+
+            Calendar calendar = Calendar.getInstance();
+            int hour=calendar.get(Calendar.HOUR_OF_DAY);
+            if(hour>= 6 && hour < 23) {
+                mDetector++;
+                dayDetector++;
+                if(startTime==0){
+                    startTime = System.currentTimeMillis();
+                }
+            }
         }
         if (event.sensor.getType()==sensorTypeD) {
-            if (event.values[0]==1.0) {
-                Calendar calendar = Calendar.getInstance();
-                int hour=calendar.get(Calendar.HOUR_OF_DAY);
-                if(hour>= 6 && hour < 23) {
-                    mDetector++;
-                    dayDetector++;
-                    if(startTime==0){
-                        startTime = System.currentTimeMillis();
-                    }
-                }
-
-            }
+//            if (event.values[0]==1.0) {
+//                Calendar calendar = Calendar.getInstance();
+//                int hour=calendar.get(Calendar.HOUR_OF_DAY);
+//                if(hour>= 6 && hour < 23) {
+//                    mDetector++;
+//                    dayDetector++;
+//                    if(startTime==0){
+//                        startTime = System.currentTimeMillis();
+//                    }
+//                }
+//
+//            }
         }
     }
 
@@ -227,10 +236,11 @@ public class StepCounterService extends Service implements SensorEventListener{
                 double distance = nowStep * 0.55 / 1000;
                 double kcal = Util.getCalory(userBean.getWeight(), distance);
                 kcal = BigDecimalUtil.doubleChange(kcal, 0);
-                bw.write(new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
+                bw.write(startTime/1000+"," + new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
                 bw.newLine();
                 bw.close();
                 mDetector -= nowStep;
+                startTime = 0;
             }
             uploadStepTask();
         } catch (FileNotFoundException e) {

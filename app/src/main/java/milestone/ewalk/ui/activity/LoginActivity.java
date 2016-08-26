@@ -44,7 +44,7 @@ public class LoginActivity extends ActivityBase{
 
     private void initView() {
         tv_protocol = (TextView) findViewById(R.id.tv_protocol);
-        tv_protocol.setText(Html.fromHtml("<u>用户协议</u>"));
+        tv_protocol.setText(Html.fromHtml("<u>活动规则</u>"));
         tv_protocol.setOnClickListener(this);
         edt_name = (EditText) findViewById(R.id.edt_name);
         name = spUtil.getUSERNAME();
@@ -76,6 +76,7 @@ public class LoginActivity extends ActivityBase{
                 }
                 break;
             case R.id.tv_protocol:
+                startA(ActivityProtocol.class,false,true);
                 break;
         }
     }

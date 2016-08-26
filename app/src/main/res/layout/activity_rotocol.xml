@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/all_bg"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#FFFFFF"
+        >
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_back"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:onClick="onClick"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="职工健步行活动规则"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="分享"
+            android:textColor="@color/my_blue"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            />
+
+    </RelativeLayout>
+
+    <View
+        style="@style/set_item_Line_hor"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:text="1、本活动为职工内部活动，严禁将自己的帐号转与他人。\n2、本活动设定有效运动时间范围：早上6点至晚上23点，其它时间为无效数据。每天建议行走6-7公里，视为合理运动。提倡每天步行万步，不建议暴走及巨量运动，对职工身体造成伤害。\n3、	参加活动应选择智能手机作为计步设备，并安装统一的计步软件。\n4、	本计步软件仅做为职工健康数据参考，不作为职工健康数据依据。\n5、	为保证记步数据采集的统一性，建议非苹果手机安装Android系统4.4版本及以上，硬件需要有协处理；苹果手机安装iOS系统8.0版本及以上，硬件支持iPhone5S及以上版本。（注：部分手机还可能存在黑屏不计步的节电模式，具体相关问题请咨询本地服务商，联系电话：13026217256 吕强）\n6、	每日推送职工个人排名，以步数做为排名标准。每周、每月推送个人周排名、月排名，由万步率及步数为排名标准。\n7、	每日、每周、每月推送各单位排名，暂以各单位排名前80的运动成绩做为排名计算标准，进入各单位可查询本单位个人排名。\n8、	每周、月公布个人及团队排名后，将奖励相应积分，职工可登录内网平台使用积分在英大书香网换取商品。具体排名积分奖励，将在后续文件中说明（积分活动最终解释权为国网江西省电力公司工会）。\n9、	借助职工健步行平台，还将陆续推出其他职工服务项目，敬请关注。"
+                />
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+
+</LinearLayout>

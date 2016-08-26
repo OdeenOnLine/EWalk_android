@@ -58,7 +58,7 @@
         android:id="@+id/tv_protocol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="用户协议"
+        android:text="活动规则"
         android:textSize="15sp"
         android:textColor="@color/my_blue"
         android:layout_margin="15dp"/>

@@ -167,7 +167,7 @@ public class ActivityMine extends ActivityBase{
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
 
-
+        Util.Log("ltf","token============="+userBean.getToken());
         String jsonData = ConnectWebservice.getInStance().connectEwalk
                 (
                         AndroidConfig.PersonInfo,
@@ -241,6 +241,7 @@ public class ActivityMine extends ActivityBase{
                             stopService(ActivityMain.service);
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("autoLogin",false);
+                            spUtil.setPASSWORD("");
                             startA(LoginActivity.class,bundle,true,true,true);
                         } else if(jsonObject.optInt("retNum")==2016){
                             Util.Tip(mContext,jsonObject.optString("retMsg"));

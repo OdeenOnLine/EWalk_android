@@ -16,6 +16,7 @@ import java.util.Map;
 
 import milestone.ewalk.R;
 import milestone.ewalk.bean.RankBean;
+import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.widget.CircularImage;
 
 public class RankAdapter extends BaseAdapter {
@@ -104,7 +105,7 @@ public class RankAdapter extends BaseAdapter {
         }else{
             viewHolder.iv_rank.setVisibility(View.GONE);
             viewHolder.tv_rank.setVisibility(View.VISIBLE);
-            viewHolder.tv_rank.setText((position+1)+"");
+            viewHolder.tv_rank.setText(rank+"");
             viewHolder.tv_core.setTextColor(Color.parseColor("#AAB2B8"));
         }
 
@@ -124,7 +125,7 @@ public class RankAdapter extends BaseAdapter {
         viewHolder.tv_name.setText(rankBean.getName());
         viewHolder.tv_company_name.setText(rankBean.getCompanyName());
         viewHolder.tv_core.setText(rankBean.getSteps()+"");
-        viewHolder.tv_wanbu.setText("万步率:"+rankBean.getWanbu()*100 +"%");
+        viewHolder.tv_wanbu.setText("万步率:"+ BigDecimalUtil.doubleChange(rankBean.getWanbu() * 100, 2) +"%");
         return convertView;
 	}
 

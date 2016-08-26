@@ -2,8 +2,12 @@ package milestone.ewalk.ui;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -12,10 +16,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import milestone.ewalk.R;
 import milestone.ewalk.bean.UserBean;
 import milestone.ewalk.util.SharePreferenceUtil;
+import milestone.ewalk.util.Util;
 
 
 public class MyApplication extends Application {
@@ -45,6 +51,26 @@ public class MyApplication extends Application {
                 .build();//
         ImageLoader.getInstance().init(config);
 
+//        getSensorList();
+    }
+
+
+    private void getSensorList() {
+        // 获取传感器管理器
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        // 获取全部传感器列表
+        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+
+        // 打印每个传感器信息
+        StringBuilder strLog = new StringBuilder();
+        int iIndex = 1;
+        for (Sensor item : sensors) {
+            strLog.append("	Sensor Name - " + item.getName() + "\r\n");
+            iIndex++;
+        }
+        Log.e("ltf", "strLog.toString()===" + strLog.toString());
+        System.out.println(strLog.toString());
     }
 
     public static MyApplication getInstance() {

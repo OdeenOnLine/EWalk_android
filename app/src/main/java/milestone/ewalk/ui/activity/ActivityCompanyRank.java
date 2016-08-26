@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.exception.NetRequestException;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.ActivityBase;
+import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
 
@@ -49,6 +51,14 @@ public class ActivityCompanyRank extends ActivityBase{
     private int companyId=0;
     private int addition=0;
 
+    private LinearLayout ll_mine;
+    private CircularImage iv_poster;
+    private ImageView iv_rank;
+    private TextView tv_rank,tv_name,tv_core,tv_company_name,tv_wanbu;
+
+    private int step = 0;
+    private boolean mine = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,11 +66,29 @@ public class ActivityCompanyRank extends ActivityBase{
 
         companyId = getIntent().getIntExtra("companyId",0);
         addition = getIntent().getIntExtra("addition",0);
+        step = getIntent().getIntExtra("step",0);
+        mine = getIntent().getBooleanExtra("mine", false);
         initView();
     }
 
     private void initView() {
         userBean = mApplication.getUserBean();
+
+        ll_mine = (LinearLayout) findViewById(R.id.ll_mine);
+        ll_mine.setOnClickListener(this);
+        if(mine){
+            ll_mine.setVisibility(View.VISIBLE);
+        }else{
+            ll_mine.setVisibility(View.GONE);
+        }
+        iv_poster = (CircularImage) findViewById(R.id.iv_poster);
+        iv_rank = (ImageView) findViewById(R.id.iv_rank);
+        tv_rank = (TextView) findViewById(R.id.tv_rank);
+        tv_name = (TextView) findViewById(R.id.tv_name);
+        tv_core = (TextView) findViewById(R.id.tv_core);
+        tv_company_name = (TextView) findViewById(R.id.tv_company_name);
+        tv_wanbu = (TextView) findViewById(R.id.tv_wanbu);
+
         lv_rank = (PullToRefreshListView) findViewById(R.id.lv_rank);
         lv_rank.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
@@ -111,10 +139,33 @@ public class ActivityCompanyRank extends ActivityBase{
                     try {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         if (jsonObject.optInt("retNum")==0) {
-                            if(!isMore) {
+                            if(!isMore){
                                 rankBeans.clear();
                                 myRank = jsonObject.optInt("rank");
                                 rankAdapter.setMyRank(myRank);
+                                if(myRank==1){
+                                    iv_rank.setImageResource(R.drawable.icon_rank_first);
+                                    iv_rank.setVisibility(View.VISIBLE);
+                                    tv_rank.setVisibility(View.GONE);
+                                }else if(myRank==2){
+                                    iv_rank.setImageResource(R.drawable.icon_rank_second);
+                                    iv_rank.setVisibility(View.VISIBLE);
+                                    tv_rank.setVisibility(View.GONE);
+                                }else if(myRank==3){
+                                    iv_rank.setImageResource(R.drawable.icon_rank_third);
+                                    iv_rank.setVisibility(View.VISIBLE);
+                                    tv_rank.setVisibility(View.GONE);
+                                }else{
+                                    iv_rank.setVisibility(View.GONE);
+                                    tv_rank.setVisibility(View.VISIBLE);
+                                    tv_rank.setText(myRank+"");
+                                }
+                                ImageLoader.getInstance().displayImage(jsonObject.optString("poster"),iv_poster);
+                                tv_name.setText(jsonObject.optString("name"));
+                                tv_company_name.setVisibility(View.VISIBLE);
+                                tv_company_name.setText(jsonObject.optString("company"));
+                                tv_core.setText(jsonObject.optInt("steps")+"");
+                                tv_wanbu.setText("万步率:"+ BigDecimalUtil.doubleChange(jsonObject.optDouble("wanbu") * 100, 2) +"%");
                             }
 
                             JSONArray jsonArray = jsonObject.getJSONArray("rankList");
@@ -144,6 +195,9 @@ public class ActivityCompanyRank extends ActivityBase{
                     } catch (NetRequestException e) {
                         e.printStackTrace();
                     }
+
+
+
                 }
 
             }
@@ -188,6 +242,11 @@ public class ActivityCompanyRank extends ActivityBase{
         switch (v.getId()){
             case R.id.iv_back:
                 finishA(true);
+                break;
+            case R.id.ll_mine:
+                Bundle bundle = new Bundle();
+                bundle.putInt("step", step);
+                startA(ActivityMine.class, bundle, false, true, false);
                 break;
         }
     }

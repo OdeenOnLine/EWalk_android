@@ -11,9 +11,15 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+
+import milestone.ewalk.util.Util;
 
 /***
  * 自定义进度条
@@ -57,7 +63,7 @@ public class SpringProgressView extends View {
 
         mPaint.setAntiAlias(true);
         int round = mWidth/2;
-        System.out.println("max="+maxCount + "  current="+currentCount);
+        Util.Log("ltf","mWidth=" + mWidth + "  mHeight=" + mHeight);
         float section = currentCount/maxCount;
         RectF rectBg = new RectF(0, 0, mWidth, mHeight);
         LinearGradient shader = new LinearGradient(0, 0, mWidth,mHeight, SECTION_COLORS,null, Shader.TileMode.MIRROR);
@@ -77,14 +83,6 @@ public class SpringProgressView extends View {
             RectF rectProgressBg = new RectF(0,mHeight*(1-section)+dipToPx(15)/2, mWidth,mHeight );
             canvas.drawRect(rectProgressBg, mPaint);
         }
-
-
-
-
-
-
-//        mPaint.setColor(Color.WHITE);
-//        canvas.drawRect(rectProgressBg, mPaint);
 
     }
 
@@ -136,6 +134,7 @@ public class SpringProgressView extends View {
 //        }
         if (widthSpecMode == MeasureSpec.EXACTLY || widthSpecMode == MeasureSpec.AT_MOST) {
             mWidth = dipToPx(15);
+//            mWidth = widthSpecSize;
         } else {
             mWidth = widthSpecSize;
         }

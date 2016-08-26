@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,6 +62,7 @@ public class ActivityMain extends ActivityBase{
     public static Intent service;
     private Button btn_run;
     private SpringProgressView progress1,progress2,progress3,progress4,progress5,progress6,progress7;
+    private TextView tv_step1,tv_step2,tv_step3,tv_step4,tv_step5,tv_step6,tv_step7;
     private TextView tv_day1,tv_day2,tv_day3,tv_day4,tv_day5,tv_day6,tv_day7;
     private TextView tv_rank;
     private TextView tv_feedback,tv_mine;
@@ -78,6 +80,7 @@ public class ActivityMain extends ActivityBase{
 
     private NewsBrocastReceiver brocastReceiver;
     public static boolean hasNewMsg = false;
+    private boolean[] stepShows = {false,false,false,false,false,false,false};
 
     class NewsBrocastReceiver extends BroadcastReceiver {
 
@@ -105,12 +108,26 @@ public class ActivityMain extends ActivityBase{
         tv_time = (TextView) findViewById(R.id.tv_time);
         tv_average_step = (TextView) findViewById(R.id.tv_average_step);
         progress1 = (SpringProgressView) findViewById(R.id.progress1);
+        progress1.setOnClickListener(this);
         progress2 = (SpringProgressView) findViewById(R.id.progress2);
+        progress2.setOnClickListener(this);
         progress3 = (SpringProgressView) findViewById(R.id.progress3);
+        progress3.setOnClickListener(this);
         progress4 = (SpringProgressView) findViewById(R.id.progress4);
+        progress4.setOnClickListener(this);
         progress5 = (SpringProgressView) findViewById(R.id.progress5);
+        progress5.setOnClickListener(this);
         progress6 = (SpringProgressView) findViewById(R.id.progress6);
+        progress6.setOnClickListener(this);
         progress7 = (SpringProgressView) findViewById(R.id.progress7);
+        progress7.setOnClickListener(this);
+        tv_step1 = (TextView) findViewById(R.id.tv_step1);
+        tv_step2 = (TextView) findViewById(R.id.tv_step2);
+        tv_step3 = (TextView) findViewById(R.id.tv_step3);
+        tv_step4 = (TextView) findViewById(R.id.tv_step4);
+        tv_step5 = (TextView) findViewById(R.id.tv_step5);
+        tv_step6 = (TextView) findViewById(R.id.tv_step6);
+        tv_step7 = (TextView) findViewById(R.id.tv_step7);
         tv_day1 = (TextView) findViewById(R.id.tv_day1);
         tv_day2 = (TextView) findViewById(R.id.tv_day2);
         tv_day3 = (TextView) findViewById(R.id.tv_day3);
@@ -301,6 +318,35 @@ public class ActivityMain extends ActivityBase{
             progress6.setCurrentCount(dayStep6*100/maxStep);
             progress7.setCurrentCount(dayStep7*100/maxStep);
 
+            LinearLayout.LayoutParams stepParams1 = (LinearLayout.LayoutParams) tv_step1.getLayoutParams();
+            stepParams1.bottomMargin = progress1.getHeight()*dayStep1/maxStep;
+            tv_step1.setLayoutParams(stepParams1);
+            tv_step1.setText(dayStep1+"");
+            LinearLayout.LayoutParams stepParams2 = (LinearLayout.LayoutParams) tv_step2.getLayoutParams();
+            stepParams2.bottomMargin = progress2.getHeight()*dayStep2/maxStep;
+            tv_step2.setLayoutParams(stepParams2);
+            tv_step2.setText(dayStep2+"");
+            LinearLayout.LayoutParams stepParams3 = (LinearLayout.LayoutParams) tv_step3.getLayoutParams();
+            stepParams3.bottomMargin = progress3.getHeight()*dayStep3/maxStep;
+            tv_step3.setLayoutParams(stepParams3);
+            tv_step3.setText(dayStep3+"");
+            LinearLayout.LayoutParams stepParams4 = (LinearLayout.LayoutParams) tv_step4.getLayoutParams();
+            stepParams4.bottomMargin = progress4.getHeight()*dayStep4/maxStep;
+            tv_step4.setLayoutParams(stepParams4);
+            tv_step4.setText(dayStep4+"");
+            LinearLayout.LayoutParams stepParams5 = (LinearLayout.LayoutParams) tv_step5.getLayoutParams();
+            stepParams5.bottomMargin = progress5.getHeight()*dayStep5/maxStep;
+            tv_step5.setLayoutParams(stepParams5);
+            tv_step5.setText(dayStep5+"");
+            LinearLayout.LayoutParams stepParams6 = (LinearLayout.LayoutParams) tv_step6.getLayoutParams();
+            stepParams6.bottomMargin = progress6.getHeight()*dayStep6/maxStep;
+            tv_step6.setLayoutParams(stepParams6);
+            tv_step6.setText(dayStep6+"");
+            LinearLayout.LayoutParams stepParams7 = (LinearLayout.LayoutParams) tv_step7.getLayoutParams();
+            stepParams7.bottomMargin = progress1.getHeight()*dayStep7/maxStep;
+            tv_step7.setLayoutParams(stepParams7);
+            tv_step7.setText(dayStep7+"");
+
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) iv_average_line.getLayoutParams();
             params.bottomMargin = averageStep*progress1.getHeight()/maxStep;
             iv_average_line.setLayoutParams(params);
@@ -438,6 +484,69 @@ public class ActivityMain extends ActivityBase{
             case R.id.tv_feedback:
                 startA(ActivityFeedBack.class,false,true);
                 break;
+            case R.id.progress1:
+                if(stepShows[0]){
+                    stepShows[0] = false;
+                    tv_step1.setVisibility(View.GONE);
+                }else{
+                    stepShows[0] = true;
+                    tv_step1.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.progress2:
+                if(stepShows[1]){
+                    stepShows[1] = false;
+                    tv_step2.setVisibility(View.GONE);
+                }else{
+                    stepShows[1] = true;
+                    tv_step2.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.progress3:
+                if(stepShows[2]){
+                    stepShows[2] = false;
+                    tv_step3.setVisibility(View.GONE);
+                }else{
+                    stepShows[2] = true;
+                    tv_step3.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.progress4:
+                if(stepShows[3]){
+                    stepShows[3] = false;
+                    tv_step4.setVisibility(View.GONE);
+                }else{
+                    stepShows[3] = true;
+                    tv_step4.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.progress5:
+                if(stepShows[4]){
+                    stepShows[4] = false;
+                    tv_step5.setVisibility(View.GONE);
+                }else{
+                    stepShows[4] = true;
+                    tv_step5.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.progress6:
+                if(stepShows[5]){
+                    stepShows[5] = false;
+                    tv_step6.setVisibility(View.GONE);
+                }else{
+                    stepShows[5] = true;
+                    tv_step6.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.progress7:
+                if(stepShows[6]){
+                    stepShows[6] = false;
+                    tv_step7.setVisibility(View.GONE);
+                }else{
+                    stepShows[6] = true;
+                    tv_step7.setVisibility(View.VISIBLE);
+                }
+                break;
         }
     }
 
@@ -462,10 +571,11 @@ public class ActivityMain extends ActivityBase{
                 double distance = nowStep * 0.55 / 1000;
                 double kcal = Util.getCalory(userBean.getWeight(), distance);
                 kcal = BigDecimalUtil.doubleChange(kcal, 0);
-                bw.write(new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
+                bw.write(StepCounterService.startTime/1000+"," + new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
                 bw.newLine();
                 bw.close();
                 StepCounterService.mDetector -= nowStep;
+                StepCounterService.startTime = 0;
             }
 
             uploadStepTask();
@@ -511,7 +621,10 @@ public class ActivityMain extends ActivityBase{
                         e.printStackTrace();
                     }
                 }
-                startA(ActivityRank.class, false, true);
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("step",step);
+                startA(ActivityRank.class,bundle,false,true,false);
 
             }
         }.execute() ;
