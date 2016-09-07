@@ -141,6 +141,17 @@ public class ActivityRank extends ActivityBase{
                         bundle.putBoolean("mine", false);
                     }
                     startA(ActivityCompanyRank.class,bundle,false,true,false);
+                }else{
+                    if(myRank == rankBeans.get(i-1).getRank()){
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("step", step);
+                        startA(ActivityMine.class, bundle, false, true, false);
+                    }else {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("userId", rankBeans.get(i - 1).getUserId());
+                        startA(ActivityPersonInfo.class, bundle, false, true, false);
+                    }
+
                 }
             }
         });
@@ -281,6 +292,7 @@ public class ActivityRank extends ActivityBase{
         proInfo.setName("token");
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
+        Util.Log("ltf","排行=========token=============="+userBean.getToken());
 
         proInfo = new PropertyInfo();
         proInfo.setName("addition");

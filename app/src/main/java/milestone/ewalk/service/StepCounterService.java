@@ -40,6 +40,7 @@ import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.activity.ActivityRank;
 import milestone.ewalk.util.BigDecimalUtil;
+import milestone.ewalk.util.SharePreferenceUtil;
 import milestone.ewalk.util.Util;
 
 /**
@@ -69,6 +70,8 @@ public class StepCounterService extends Service implements SensorEventListener{
     private File file;
     public static float dayDetector;//当天步数
     public static long startTime=0;
+    private float lastCount=0;//上次记录的步行总数
+    private  SharePreferenceUtil shareUtils;
 
 
     @Override
@@ -81,7 +84,11 @@ public class StepCounterService extends Service implements SensorEventListener{
     public void onCreate() {
         // TODOAuto-generated method stub
         super.onCreate();
+        Log.e("ltf","onCreate========="+dayDetector);
 
+        if (shareUtils == null) {
+            shareUtils = new SharePreferenceUtil(this,"Ewalk");
+        }
 
         mBR = new BroadcastReceiver() {
             @Override
@@ -143,6 +150,8 @@ public class StepCounterService extends Service implements SensorEventListener{
                 isRankUpdate = true;
                 dayDetector = 0;
                 mDetector = 0;
+                shareUtils.setDAY_DETECTOR(dayDetector);
+                shareUtils.setM_DETECTOR(mDetector);
             }
         },initDelay,24*60*60*1000);
     }
@@ -186,15 +195,31 @@ public class StepCounterService extends Service implements SensorEventListener{
     public void onSensorChanged(SensorEvent event) {
 
         if (event.sensor.getType()==sensorTypeC) {
+            String values="";
+            for(int i=0;i<event.values.length;i++){
+                values += event.values[i]+"====";
+            }
+            Log.e("ltf","values========="+values);
             mCount = event.values[0];
-
+            int addStep=0;
+            if(lastCount!=0){
+                addStep = (int) (mCount-lastCount);
+            }
+            lastCount = mCount;
             Calendar calendar = Calendar.getInstance();
             int hour=calendar.get(Calendar.HOUR_OF_DAY);
             if(hour>= 6 && hour < 23) {
-                mDetector++;
-                dayDetector++;
+                if(addStep>0){
+                    mDetector += addStep;
+                    dayDetector += addStep;
+                    shareUtils.setDAY_DETECTOR(dayDetector);
+                    shareUtils.setM_DETECTOR(mDetector);
+                }
+//                mDetector++;
+//                dayDetector++;
                 if(startTime==0){
                     startTime = System.currentTimeMillis();
+                    shareUtils.setStart_TIME(startTime);
                 }
             }
         }
@@ -241,6 +266,9 @@ public class StepCounterService extends Service implements SensorEventListener{
                 bw.close();
                 mDetector -= nowStep;
                 startTime = 0;
+
+                shareUtils.setStart_TIME(startTime);
+                shareUtils.setM_DETECTOR(mDetector);
             }
             uploadStepTask();
         } catch (FileNotFoundException e) {
@@ -276,6 +304,7 @@ public class StepCounterService extends Service implements SensorEventListener{
                         if (jsonObject.optString("retNum").equals("0")) {
                             file.delete();
                             dayDetector = 0;
+                            shareUtils.setDAY_DETECTOR(dayDetector);
                             sendBroadcast(new Intent("StepRefresh"));
                         }
                     } catch (JSONException e) {
@@ -326,6 +355,8 @@ public class StepCounterService extends Service implements SensorEventListener{
         inputFile.close();
         return Base64.encodeToString(buffer, Base64.DEFAULT);
     }
+
+
 
     @Override
     public void onDestroy() {

@@ -110,6 +110,15 @@ public class MyApplication extends Application {
         }
     }
 
+    public void clearTopActivity(){
+        for(int i=0;i<mBaseActivityList.size()-1;i++){
+            if (mBaseActivityList.get(i) != null) {
+                mBaseActivityList.get(i).finish();
+            }
+        }
+
+    }
+
     public void exit() {
 
 

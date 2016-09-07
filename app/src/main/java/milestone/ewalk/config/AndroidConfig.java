@@ -6,7 +6,10 @@ package milestone.ewalk.config;
 public class AndroidConfig {
 //    public static String ip_address = "http://192.168.1.88:8899"; // 接口服务器IP地址
 //    public static String ip_address = "http://192.168.1.138:8080"; // 接口服务器IP地址
-    public static String ip_address = "http://218.65.96.6:8080"; // 正式服务器IP地址
+//    public static String ip_address = "http://218.65.96.6:8080"; // 正式服务器IP地址
+    public static String ip_address = "http://120.76.41.254:8080"; // 正式服务器IP地址
+
+
 
     //管理员登录
     public static String LoginAsAdmin = "loginAsAdmin";
@@ -56,5 +59,6 @@ public class AndroidConfig {
     //是否有新消息
     public static String HasNewMsg = "hasNewMsg";
 
-
+    //根据id获取个人信息
+    public static String PersonInfoById = "personInfoById";
 }

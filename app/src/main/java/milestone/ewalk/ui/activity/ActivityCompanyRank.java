@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -101,6 +102,24 @@ public class ActivityCompanyRank extends ActivityBase{
                     isMore = true;
                     rankInfoTask();
                 }
+            }
+        });
+
+        lv_rank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(myRank == rankBeans.get(i-1).getRank()){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("step", step);
+                    startA(ActivityMine.class, bundle, false, true, false);
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("userId", rankBeans.get(i - 1).getUserId());
+                    startA(ActivityPersonInfo.class, bundle, false, true, false);
+                }
+
+
             }
         });
         rankAdapter = new RankAdapter(ActivityCompanyRank.this,rankBeans,1);

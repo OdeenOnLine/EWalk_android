@@ -63,7 +63,6 @@ public class SpringProgressView extends View {
 
         mPaint.setAntiAlias(true);
         int round = mWidth/2;
-        Util.Log("ltf","mWidth=" + mWidth + "  mHeight=" + mHeight);
         float section = currentCount/maxCount;
         RectF rectBg = new RectF(0, 0, mWidth, mHeight);
         LinearGradient shader = new LinearGradient(0, 0, mWidth,mHeight, SECTION_COLORS,null, Shader.TileMode.MIRROR);

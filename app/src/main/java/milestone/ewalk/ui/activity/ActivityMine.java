@@ -152,12 +152,12 @@ public class ActivityMine extends ActivityBase{
         tv_name.setText(userBean.getName());
         tv_company.setText(userBean.getCompany());
         tv_height_weight.setText(userBean.getHeight()+"cm,"+userBean.getWeight()+"kg");
-        tv_step.setText(step+"步");
-        tv_mile.setText(userBean.getRecord()+"公里");
-        tv_points.setText(userBean.getPoints()+"积分");
+        tv_step.setText(step+"");
+        tv_mile.setText(BigDecimalUtil.doubleChange(userBean.getRecord(),2)+"");
+        tv_points.setText(userBean.getPoints()+"");
         double kcal = Util.getCalory(userBean.getWeight(), userBean.getRecord());
         kcal = BigDecimalUtil.doubleChange(kcal, 0);
-        tv_kcal.setText(kcal+"千卡");
+        tv_kcal.setText(kcal+"");
     }
 
     private String personInfo() {
@@ -167,7 +167,6 @@ public class ActivityMine extends ActivityBase{
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
 
-        Util.Log("ltf","token============="+userBean.getToken());
         String jsonData = ConnectWebservice.getInStance().connectEwalk
                 (
                         AndroidConfig.PersonInfo,

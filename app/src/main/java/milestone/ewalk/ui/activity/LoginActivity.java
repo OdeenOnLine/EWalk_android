@@ -1,5 +1,6 @@
 package milestone.ewalk.ui.activity;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -37,6 +38,8 @@ public class LoginActivity extends ActivityBase{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MyApplication.getInstance().clearTopActivity();
         setContentView(R.layout.activity_login);
 
         initView();

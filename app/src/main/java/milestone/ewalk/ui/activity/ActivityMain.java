@@ -81,6 +81,7 @@ public class ActivityMain extends ActivityBase{
     private NewsBrocastReceiver brocastReceiver;
     public static boolean hasNewMsg = false;
     private boolean[] stepShows = {false,false,false,false,false,false,false};
+    private boolean isDestroy = false;
 
     class NewsBrocastReceiver extends BroadcastReceiver {
 
@@ -154,6 +155,10 @@ public class ActivityMain extends ActivityBase{
         startService(service);
         userBean = mApplication.getUserBean();
         StepCounterService.userBean = userBean;
+        StepCounterService.dayDetector = spUtil.getDAY_DETECTOR();
+        StepCounterService.mDetector = spUtil.getM_DETECTOR();
+        StepCounterService.startTime = spUtil.getStart_TIME();
+
         Calendar c = Calendar.getInstance(); // 当时的日期和时间
         int day = c.get(Calendar.DAY_OF_MONTH);
         c.set(Calendar.DAY_OF_MONTH, day-1);
@@ -212,7 +217,6 @@ public class ActivityMain extends ActivityBase{
 
     private void initTodayMessage() {
         step = (int) StepCounterService.dayDetector;
-
         if(steps!=null){
             step += Integer.parseInt(steps[steps.length-1]);
         }
@@ -376,7 +380,7 @@ public class ActivityMain extends ActivityBase{
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
 
-
+        Util.Log("ltf","7天信息=========token=============="+userBean.getToken());
         String jsonData = ConnectWebservice.getInStance().connectEwalk
                 (
                         AndroidConfig.SevenMessage,
@@ -447,7 +451,6 @@ public class ActivityMain extends ActivityBase{
         String time = spUtil.getMESSAGE_TIME();
         proInfo.setValue(time);
         proInfoList.add(proInfo);
-
 
         String jsonData = ConnectWebservice.getInStance().connectEwalk
                 (
@@ -576,6 +579,9 @@ public class ActivityMain extends ActivityBase{
                 bw.close();
                 StepCounterService.mDetector -= nowStep;
                 StepCounterService.startTime = 0;
+
+                spUtil.setStart_TIME(0);
+                spUtil.setM_DETECTOR(StepCounterService.mDetector);
             }
 
             uploadStepTask();
@@ -615,6 +621,7 @@ public class ActivityMain extends ActivityBase{
                         if (jsonObject.optString("retNum").equals("0")) {
                             file.delete();
                             StepCounterService.dayDetector = 0;
+                            spUtil.setDAY_DETECTOR(StepCounterService.dayDetector);
                             sendBroadcast(new Intent("StepRefresh"));
                         }
                     } catch (JSONException e) {
@@ -622,9 +629,11 @@ public class ActivityMain extends ActivityBase{
                     }
                 }
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("step",step);
-                startA(ActivityRank.class,bundle,false,true,false);
+                if(!isDestroy) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("step", step);
+                    startA(ActivityRank.class, bundle, false, true, false);
+                }
 
             }
         }.execute() ;
@@ -651,7 +660,7 @@ public class ActivityMain extends ActivityBase{
         proInfo.setValue(strBuffer);
         proInfoList.add(proInfo);
 
-
+        Util.Log("ltf","步数上传=========token=============="+userBean.getToken());
         String jsonData = ConnectWebservice.getInStance().connectEwalk
                 (
                         AndroidConfig.UploadSteps,
@@ -674,6 +683,9 @@ public class ActivityMain extends ActivityBase{
     protected void onDestroy() {
         super.onDestroy();
 //        stopService(service);
+        isDestroy = true;
+        float nowStep = StepCounterService.mDetector;
+        saveDataToCSV(nowStep);
         if(timer!=null){
             timer.cancel();
         }
@@ -684,4 +696,6 @@ public class ActivityMain extends ActivityBase{
     public void onBackPressed() {
         MyApplication.getInstance().shutDown();
     }
+
+
 }

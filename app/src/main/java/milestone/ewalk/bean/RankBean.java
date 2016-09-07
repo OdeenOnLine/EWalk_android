@@ -16,6 +16,7 @@ public class RankBean extends BaseBean{
     private int rank;
     private int steps;
     private double wanbu;
+    private int userId;
 
     @Override
     public JSONObject toJSON() {
@@ -31,6 +32,7 @@ public class RankBean extends BaseBean{
         rank = jsonObj.optInt("rank");
         steps = jsonObj.optInt("steps");
         wanbu = jsonObj.optDouble("wanbu");
+        userId = jsonObj.optInt("userId");
         return this;
     }
 
@@ -88,5 +90,13 @@ public class RankBean extends BaseBean{
 
     public void setCompanyId(int companyId) {
         this.companyId = companyId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
