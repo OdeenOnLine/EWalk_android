@@ -3,6 +3,7 @@ package milestone.ewalk.widget.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -53,9 +54,14 @@ public class InfoMsgHint extends Dialog {
 	}
 
 	public void setContent(String content) {
-		dialog_info_content_.setText(content);
+        dialog_info_content_.setText(content);
 
-	}
+    }
+
+    public void hideUpLode() {
+        dialog_info_upload.setVisibility(View.GONE);
+
+    }
 
 	public void setContent(String content_title, String content,
 			String OKString, String cancleString) {

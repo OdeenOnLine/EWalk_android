@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="milestone.ewalk"
-    android:versionCode="1"
-    android:versionName="1.0">
+    >
 
     <uses-permission android:name="android.permission.SENSOR_INFO" />
     <uses-permission android:name="android.permission.SENSOR_ENABLE" />
@@ -154,6 +153,9 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+
+        <meta-data android:value="57d10a56e0f55a21f1002a2a" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="umeng_android" android:name="UMENG_CHANNEL"/>
 
     </application>
 

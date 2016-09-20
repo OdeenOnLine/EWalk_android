@@ -1,11 +1,15 @@
 package milestone.ewalk.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.DownloadListener;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,6 +36,7 @@ import milestone.ewalk.ui.ActivityBase;
 import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
+import milestone.ewalk.widget.dialog.InfoMsgHint;
 
 /**
  * 我的信息
@@ -42,7 +47,8 @@ public class ActivityMine extends ActivityBase{
     private ImageView iv_switch;
     private LinearLayout ll_record;
     private TextView tv_union,tv_name,tv_company,tv_height_weight,tv_step,tv_mile,tv_points,tv_kcal;
-    private LinearLayout ll_pwd_change,ll_message_center;
+    private LinearLayout ll_pwd_change,ll_message_center,ll_version;
+    private TextView tv_version;
     private TextView tv_logout;
 
     private boolean isSwitch = true;
@@ -50,6 +56,9 @@ public class ActivityMine extends ActivityBase{
     private static final int PIC_Select_POSTER_ImageFromLocal = 2;// 头像相册取图
     private int step=0;
     private CircularImage iv_message_hint;
+    private String versionName = "";
+    private InfoMsgHint msgHint;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +94,24 @@ public class ActivityMine extends ActivityBase{
         ll_message_center = (LinearLayout) findViewById(R.id.ll_message_center);
         ll_message_center.setOnClickListener(this);
         iv_message_hint = (CircularImage) findViewById(R.id.iv_message_hint);
+        ll_version = (LinearLayout) findViewById(R.id.ll_version);
+        ll_version.setOnClickListener(this);
+        tv_version = (TextView) findViewById(R.id.tv_version);
+
+        getVersion();
         personInfoTask();
+    }
+
+    private void getVersion() {
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            versionName = info.versionName;
+            tv_version.setText(versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -210,8 +236,106 @@ public class ActivityMine extends ActivityBase{
             case R.id.ll_message_center:
                 startA(ActivityMessageCenter.class,false,true);
                 break;
+            case R.id.ll_version:
+                updateVersionTask();
+
+//                try {
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    i.setData(Uri.parse("market://details?id=com.milestone.wtz"));
+//                    startActivity(i);
+//                } catch (Exception e) {
+//                    Util.Tip(mContext, "您的手机上没有安装Android应用市场");
+//                    e.printStackTrace();
+//                }
+                break;
         }
     }
+
+    //获取最新版本
+    private void updateVersionTask() {
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected void onPreExecute() {
+                showLoadingDialog();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                return updateVersion();		//封装参数
+            }
+
+            @Override
+            protected void onPostExecute(String jsonData) {
+                hideLoadingDialog();
+                if(jsonData==null){
+                    Util.Tip(mContext, "获取最新版本失败");
+                }else {
+                    try {
+                        final JSONObject jsonObject = new JSONObject(jsonData);
+                        if (jsonObject.optInt("retNum")==0) {
+                            String version = jsonObject.optString("versionName");
+                            final String url = jsonObject.optString("url");
+                            if(version.equals(versionName)){
+                                Util.Tip(mContext,"当前已是最新版本");
+                            }else{
+                                msgHint = new InfoMsgHint(mContext,R.style.MyDialog1);
+                                msgHint.setContent("有新版本，需要下载更新吗?");
+                                msgHint.hideUpLode();
+                                msgHint.setCancelListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        msgHint.dismiss();
+                                    }
+                                });
+                                msgHint.setOKListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        msgHint.dismiss();
+                                        Uri uri = Uri.parse(url);
+                                        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                                        startActivity(intent);
+
+                                    }
+                                });
+                                msgHint.show();
+                            }
+
+//                            Util.Log("ltf","jsonObject==========="+jsonObject);
+                        } else if(jsonObject.optInt("retNum")==2016){
+                            Util.Tip(mContext,jsonObject.optString("retMsg"));
+                            stopService(ActivityMain.service);
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("autoLogin",false);
+                            startA(LoginActivity.class,bundle,true,true,true);
+                        }else {
+                            Util.Tip(mContext, jsonObject.optString("retMsg"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }.execute() ;
+    }
+
+
+    private String updateVersion() {
+        ArrayList<PropertyInfo> proInfoList = new ArrayList<PropertyInfo>();
+//        PropertyInfo proInfo = new PropertyInfo();
+//        proInfo.setName("token");
+//        proInfo.setValue(userBean.getToken());
+//        proInfoList.add(proInfo);
+        String jsonData = ConnectWebservice.getInStance().connectEwalk
+                (
+                        AndroidConfig.UpdateVersion,
+                        proInfoList
+                );
+
+        return jsonData;
+    }
+
 
 
     //新建异步任务退出
@@ -285,7 +409,7 @@ public class ActivityMine extends ActivityBase{
             case PIC_Select_POSTER_ImageFromLocal:
                 if (data != null && data.getData() != null) {
                     Uri uri = data.getData();
-
+                    showLoadingDialog();
                     changeInfoTask(uri);
                 }
                 break;

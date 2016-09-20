@@ -121,7 +121,7 @@ public abstract class ActivityBase extends Activity implements  View.OnClickList
     }
 
     public void hideLoadingDialog() {
-        mDialogLoading.hide();
+        mDialogLoading.dismiss();
 
 
     }

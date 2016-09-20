@@ -684,8 +684,8 @@ public class ActivityMain extends ActivityBase{
         super.onDestroy();
 //        stopService(service);
         isDestroy = true;
-        float nowStep = StepCounterService.mDetector;
-        saveDataToCSV(nowStep);
+//        float nowStep = StepCounterService.mDetector;
+//        saveDataToCSV(nowStep);
         if(timer!=null){
             timer.cancel();
         }
