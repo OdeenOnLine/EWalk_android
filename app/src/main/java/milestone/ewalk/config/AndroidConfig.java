@@ -41,6 +41,9 @@ public class AndroidConfig {
     //跑步记录
     public static String Record = "record";
 
+    //走路记录
+    public static String ReStpes = "restpes";
+
     //个人排行
     public static String Rank = "rank";
 

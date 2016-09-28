@@ -23,14 +23,36 @@
             android:onClick="onClick"
             />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="历史记录"
-            android:textColor="#000000"
-            android:textSize="20sp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:layout_centerInParent="true"
-            />
+            android:gravity="center"
+            >
+
+            <TextView
+                android:id="@+id/tv_walk"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:text="步数记录"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:background="@drawable/bg_button_blue"
+                />
+
+            <TextView
+                android:id="@+id/tv_run"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:text="跑步记录"
+                android:textColor="@color/my_blue"
+                android:textSize="18sp"
+                android:gravity="center"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

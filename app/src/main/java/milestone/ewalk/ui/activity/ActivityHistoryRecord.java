@@ -1,6 +1,7 @@
 package milestone.ewalk.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +35,7 @@ import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.exception.NetRequestException;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.ActivityBase;
+import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
 
@@ -51,7 +53,10 @@ public class ActivityHistoryRecord extends ActivityBase{
     private boolean isMore = false;
     private boolean isLastPage = false;
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private Handler handler = new Handler();
+    private TextView tv_walk,tv_run;
+    private int type = 1;//1:走路 2:跑步
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,10 @@ public class ActivityHistoryRecord extends ActivityBase{
 
     private void initView() {
         userBean = mApplication.getUserBean();
+        tv_walk = (TextView) findViewById(R.id.tv_walk);
+        tv_walk.setOnClickListener(this);
+        tv_run = (TextView) findViewById(R.id.tv_run);
+        tv_run.setOnClickListener(this);
         lv_record = (PullToRefreshListView) findViewById(R.id.lv_record);
         adapter = new DataAdapter();
         lv_record.setAdapter(adapter);
@@ -173,12 +182,20 @@ public class ActivityHistoryRecord extends ActivityBase{
         proInfo.setValue(pageSize+"");
         proInfoList.add(proInfo);
 
-
-        String jsonData = ConnectWebservice.getInStance().connectEwalk
-                (
-                        AndroidConfig.Record,
-                        proInfoList
-                );
+        String jsonData = "";
+        if(type==1) {
+            jsonData = ConnectWebservice.getInStance().connectEwalk
+                    (
+                            AndroidConfig.ReStpes,
+                            proInfoList
+                    );
+        }else{
+            jsonData = ConnectWebservice.getInStance().connectEwalk
+                    (
+                            AndroidConfig.Record,
+                            proInfoList
+                    );
+        }
 
         return jsonData;
     }
@@ -188,6 +205,34 @@ public class ActivityHistoryRecord extends ActivityBase{
         switch (v.getId()){
             case R.id.iv_back:
                 finishA(true);
+                break;
+            case R.id.tv_walk:
+                if(type == 2){
+                    type = 1;
+                    tv_walk.setBackgroundResource(R.drawable.bg_button_blue);
+                    tv_walk.setTextColor(Color.parseColor("#FFFFFF"));
+                    tv_run.setBackgroundResource(0);
+                    tv_run.setTextColor(Color.parseColor("#62D4D9"));
+
+                    isMore = false;
+                    currentPage = 1;
+                    isLastPage = false;
+                    recordTask();
+                }
+                break;
+            case R.id.tv_run:
+                if(type == 1){
+                    type = 2;
+                    tv_run.setBackgroundResource(R.drawable.bg_button_blue);
+                    tv_run.setTextColor(Color.parseColor("#FFFFFF"));
+                    tv_walk.setBackgroundResource(0);
+                    tv_walk.setTextColor(Color.parseColor("#62D4D9"));
+                    isMore = false;
+                    currentPage = 1;
+                    isLastPage = false;
+                    recordTask();
+                }
+
                 break;
         }
     }
@@ -233,31 +278,47 @@ public class ActivityHistoryRecord extends ActivityBase{
             localViewHolder.iv_point.setImageResource(R.color.my_blue);
 
             final RunRecordBean bean = runRecordBeans.get(position);
-            Date date = new Date(bean.getStart_time()*1000);
-            localViewHolder.tv_start_time.setText(simpleDateFormat.format(date));
-            long time = bean.getLast();
-            int h= (int) (time/3600);
-            int m= (int) ((time-h*3600)/60);
-            int s= (int) ((time-h*3600)%60);
-            localViewHolder.tv_last.setText(h + ":"+m + ":"+s);
-            localViewHolder.tv_mile.setText(bean.getMile()+"公里");
-            localViewHolder.tv_kcal.setText(bean.getCalory()+"千卡");
-            if(bean.getMile()==0){
-                localViewHolder.tv_speed.setText("0'0\"");
+
+            if(type==1){
+                localViewHolder.tv_start_time.setText(bean.getStrStartTime());
+                localViewHolder.tv_last.setVisibility(View.GONE);
+                localViewHolder.tv_speed.setVisibility(View.GONE);
+                localViewHolder.tv_mile.setText(bean.getSteps() + "步");
+                double distance = bean.getSteps() * 0.55 / 1000;
+                double kcal = Util.getCalory(userBean.getWeight(), distance);
+                kcal = BigDecimalUtil.doubleChange(kcal, 3);
+                localViewHolder.tv_kcal.setText(kcal + "千卡");
             }else {
-                int second = (int) (time / bean.getMile());
-                localViewHolder.tv_speed.setText(second / 60 + "'" + second % 60 + "\"");
+                Date date = new Date(bean.getStart_time()*1000);
+                localViewHolder.tv_start_time.setText(simpleDateFormat.format(date));
+                long time = bean.getLast();
+                int h = (int) (time / 3600);
+                int m = (int) ((time - h * 3600) / 60);
+                int s = (int) ((time - h * 3600) % 60);
+                localViewHolder.tv_last.setVisibility(View.VISIBLE);
+                localViewHolder.tv_speed.setVisibility(View.VISIBLE);
+                localViewHolder.tv_last.setText(h + ":" + m + ":" + s);
+                localViewHolder.tv_mile.setText(bean.getMile() + "公里");
+                localViewHolder.tv_kcal.setText(bean.getCalory() + "千卡");
+                if (bean.getMile() == 0) {
+                    localViewHolder.tv_speed.setText("0'0\"");
+                } else {
+                    int second = (int) (time / bean.getMile());
+                    localViewHolder.tv_speed.setText(second / 60 + "'" + second % 60 + "\"");
+                }
             }
 
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setClass(mContext,ActivityRunMapRecord.class);
-                    intent.putExtra("runRecordBean",bean);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                    if(type==2) {
+                        Intent intent = new Intent();
+                        intent.setClass(mContext, ActivityRunMapRecord.class);
+                        intent.putExtra("runRecordBean", bean);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                    }
                 }
             });
             return convertView;

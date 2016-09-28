@@ -18,12 +18,15 @@ import android.widget.Toast;
 
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.baidu.trace.LBSTraceClient;
@@ -31,6 +34,7 @@ import com.baidu.trace.LocationMode;
 import com.baidu.trace.OnEntityListener;
 import com.baidu.trace.OnStartTraceListener;
 import com.baidu.trace.OnStopTraceListener;
+import com.baidu.trace.OnTrackListener;
 import com.baidu.trace.Trace;
 import com.baidu.trace.TraceLocation;
 
@@ -48,6 +52,8 @@ import milestone.ewalk.config.AndroidConfig;
 import milestone.ewalk.net.ConnectWebservice;
 import milestone.ewalk.ui.ActivityBase;
 import milestone.ewalk.util.BigDecimalUtil;
+import milestone.ewalk.util.GsonService;
+import milestone.ewalk.util.HistoryTrackData;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.dialog.InfoMsgHint;
 import milestone.ewalk.widget.dialog.InfoSimpleMsgHint;
@@ -140,6 +146,8 @@ public class ActivityRunMap extends ActivityBase{
         client = new LBSTraceClient(getApplicationContext());
         // 设置定位模式
         client.setLocationMode(LocationMode.High_Accuracy);
+        //设置位置采集和打包周期
+        client.setInterval(gatherInterval, packInterval);
         // 初始化entity标识
         entityName = userBean.getUserId()+"";
         // 初始化轨迹服务
@@ -369,7 +377,7 @@ public class ActivityRunMap extends ActivityBase{
                     }
                 });
 
-
+//                MapStatus mMapStatus = new MapStatus.Builder().target(point).zoom(19).build();
                 showRealtimeTrack(location);
                  System.out.println("获取到实时位置:" + location.toString());
 
@@ -389,6 +397,8 @@ public class ActivityRunMap extends ActivityBase{
             while (refresh) {
                 // 查询实时位置
                 queryRealtimeLoc();
+                //查询历史轨迹
+                queryHistoryRecord();
                 try {
                     Thread.sleep(gatherInterval * 1000);
                 } catch (InterruptedException e) {
@@ -412,6 +422,113 @@ public class ActivityRunMap extends ActivityBase{
     }
 
     /**
+     * 查询历史轨迹
+     *
+     * @param
+     */
+    private void queryHistoryRecord() {
+        if(client!=null) {
+            Util.Log("ltf","startTime===="+startTime+"===(int)new Date().getTime() / 1000==="+(int)(new Date().getTime() / 1000));
+            client.queryProcessedHistoryTrack(serviceId, entityName, 0, 1, (int)startTime, (int)(new Date().getTime() / 1000), 5000, 1, trackListener);
+
+        }
+    }
+
+    //轨迹查询监听器
+    OnTrackListener trackListener = new OnTrackListener() {
+        //请求失败回调接口
+        @Override
+        public void onRequestFailedCallback(String arg0) {
+            System.out.println("track请求失败回调接口消息 : " + arg0);
+        }
+
+        // 查询历史轨迹回调接口
+        @Override
+        public void onQueryHistoryTrackCallback(String arg0) {
+            System.out.println("查询历史轨迹回调接口消息 : " + arg0);
+            showHistoryTrack(arg0);
+        }
+
+    };
+
+
+    /**
+     * 显示历史轨迹
+     *
+     * @param historyTrack
+     */
+    protected void showHistoryTrack(String historyTrack) {
+
+        HistoryTrackData historyTrackData = GsonService.parseJson(historyTrack,
+                HistoryTrackData.class);
+
+        List<LatLng> latLngList = new ArrayList<LatLng>();
+        if (historyTrackData != null && historyTrackData.getStatus() == 0) {
+            if (historyTrackData.getListPoints() != null) {
+                latLngList.addAll(historyTrackData.getListPoints());
+            }
+            Util.Log("ltf","latLngList==="+latLngList.size());
+            // 绘制历史轨迹
+            drawHistoryTrack(latLngList, historyTrackData.distance);
+
+        }
+
+    }
+
+    /**
+     * 绘制历史轨迹
+     *
+     * @param points
+     */
+    private void drawHistoryTrack(final List<LatLng> points, final double distance) {
+        // 绘制新覆盖物前，清空之前的覆盖物
+        mBaiduMap.clear();
+
+        if (points != null && points.size() > 1) {
+            LatLng llC = points.get(0);
+            LatLng llD = points.get(points.size() - 1);
+            LatLngBounds bounds = new LatLngBounds.Builder()
+                    .include(llC).include(llD).build();
+
+//            msUpdate = MapStatusUpdateFactory.newLatLngBounds(bounds);
+
+            // 添加路线（轨迹）
+            polyline = new PolylineOptions().width(10)
+                    .color(Color.RED).points(points);
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    myDistance = BigDecimalUtil.doubleChange(distance/1000, 3);
+                    calory = Util.getCalory(userBean.getWeight(),myDistance);
+                    calory = BigDecimalUtil.doubleChange(calory, 0);
+
+                    tv_distance1.setText(myDistance+"");
+                    tv_distance2.setText(myDistance+"");
+                    tv_kcal.setText(calory+"");
+                    if(myDistance!=0) {
+                        int time = (int) (temp / myDistance);
+                        tv_speed.setText(time/60+"'"+time%60+"\"");
+                    }
+
+                }
+            });
+
+            addMarker();
+
+//            Looper.prepare();
+//            Toast.makeText(mContext, "当前轨迹里程为 : " + (int) distance + "米", Toast.LENGTH_SHORT).show();
+//            Looper.loop();
+
+        }
+
+    }
+
+
+    /**
      * 显示实时轨迹
      * @param location
      */
@@ -429,9 +546,7 @@ public class ActivityRunMap extends ActivityBase{
 //                    null);
 
         } else {
-
             LatLng latLng = new LatLng(latitude, longitude);
-
             if (1 == location.getCoordType()) {
                 LatLng sourceLatLng = latLng;
                 CoordinateConverter converter = new
@@ -442,32 +557,30 @@ public class ActivityRunMap extends ActivityBase{
                         converter.convert();
             }
 
-            pointList.add(latLng);
-
-
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if(pointList.size()>=2){
-
-                        distance += Math.abs(DistanceUtil. getDistance(pointList.get(pointList.size()-2), pointList.get(pointList.size()-1)));
-                        //取2位小数四舍五入
-                        myDistance = BigDecimalUtil.doubleChange(distance/1000, 3);
-                        calory = Util.getCalory(userBean.getWeight(),myDistance);
-                        calory = BigDecimalUtil.doubleChange(calory, 0);
-                    }
-                    tv_distance1.setText(myDistance+"");
-                    tv_distance2.setText(myDistance+"");
-                    tv_kcal.setText(calory+"");
-                    if(myDistance!=0) {
-                        int time = (int) (temp / myDistance);
-                        tv_speed.setText(time/60+"'"+time%60+"\"");
-                    }
-
-                }
-            });
+//            pointList.add(latLng);
+//
+//
+//
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if(pointList.size()>=2){
+//                        distance += Math.abs(DistanceUtil. getDistance(pointList.get(pointList.size()-2), pointList.get(pointList.size()-1)));
+//                        //取2位小数四舍五入
+//                        myDistance = BigDecimalUtil.doubleChange(distance/1000, 3);
+//                        calory = Util.getCalory(userBean.getWeight(),myDistance);
+//                        calory = BigDecimalUtil.doubleChange(calory, 0);
+//                    }
+//                    tv_distance1.setText(myDistance+"");
+//                    tv_distance2.setText(myDistance+"");
+//                    tv_kcal.setText(calory+"");
+//                    if(myDistance!=0) {
+//                        int time = (int) (temp / myDistance);
+//                        tv_speed.setText(time/60+"'"+time%60+"\"");
+//                    }
+//
+//                }
+//            });
 
             // 绘制实时点
             drawRealtimePoint(latLng);
@@ -481,17 +594,17 @@ public class ActivityRunMap extends ActivityBase{
      * @param point
      */
     private void drawRealtimePoint(LatLng point) {
-        mBaiduMap.clear();
+//        mBaiduMap.clear();
 
         MapStatus mMapStatus = new MapStatus.Builder().target(point).zoom(19).build();
 
         msUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
 
-        if (pointList.size() >= 2 && pointList.size() <= 10000) {
-            // 添加路线（轨迹）
-            polyline = new PolylineOptions().width(10)
-                    .color(Color.RED).points(pointList);
-        }
+//        if (pointList.size() >= 2 && pointList.size() <= 10000) {
+//            // 添加路线（轨迹）
+//            polyline = new PolylineOptions().width(10)
+//                    .color(Color.RED).points(pointList);
+//        }
 
         addMarker();
 

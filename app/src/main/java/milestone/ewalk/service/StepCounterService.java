@@ -84,7 +84,6 @@ public class StepCounterService extends Service implements SensorEventListener{
     public void onCreate() {
         // TODOAuto-generated method stub
         super.onCreate();
-        Log.e("ltf","onCreate========="+dayDetector);
 
         if (shareUtils == null) {
             shareUtils = new SharePreferenceUtil(this,"Ewalk");
@@ -199,7 +198,6 @@ public class StepCounterService extends Service implements SensorEventListener{
             for(int i=0;i<event.values.length;i++){
                 values += event.values[i]+"====";
             }
-            Log.e("ltf","values========="+values);
             mCount = event.values[0];
             int addStep=0;
             if(lastCount!=0){

@@ -50,6 +50,10 @@ public class ActivityRunMapRecord extends ActivityBase{
     String entityName = "falsesheep";
     //是否返回精简的结果（0 : 将只返回经纬度，1 : 将返回经纬度及其他属性信息）
     int simpleReturn = 0;
+    // 是否纠偏
+    int isProcessed = 1;
+    // 纠偏选项
+    String processOption = "need_denoise=1,need_vacuate=1,need_mapmatch=0";
     //开始时间（Unix时间戳）
     int startTime = 1464796800;
     //结束时间（Unix时间戳）
@@ -109,10 +113,11 @@ public class ActivityRunMapRecord extends ActivityBase{
 
         startTime = (int) runRecordBean.getStart_time();
         endTime = (int) runRecordBean.getEnd_time();
-        Util.Log("ltf",entityName+"===="+startTime+"==="+endTime);
         //查询历史轨迹
-        client.queryHistoryTrack(serviceId, entityName, simpleReturn, startTime, endTime, pageSize,pageIndex,trackListener);
-//        client.queryRealtimeLoc(serviceId, entityListener);
+//        client.queryHistoryTrack(serviceId, entityName, simpleReturn,startTime, endTime, pageSize,pageIndex,trackListener);
+
+
+        client.queryHistoryTrack(serviceId, entityName, simpleReturn, isProcessed,processOption,startTime, endTime,pageSize,pageIndex,trackListener);
     }
 
     // 将秒转化成小时分钟秒

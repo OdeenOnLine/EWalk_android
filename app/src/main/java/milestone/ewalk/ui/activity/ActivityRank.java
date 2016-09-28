@@ -292,7 +292,6 @@ public class ActivityRank extends ActivityBase{
         proInfo.setName("token");
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
-        Util.Log("ltf","排行=========token=============="+userBean.getToken());
 
         proInfo = new PropertyInfo();
         proInfo.setName("addition");

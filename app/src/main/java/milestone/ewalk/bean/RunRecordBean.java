@@ -14,6 +14,8 @@ public class RunRecordBean extends BaseBean{
     private long end_time;
     private double mile;
     private long calory;
+    private long steps;
+    private String strStartTime;
 
     @Override
     public JSONObject toJSON() {
@@ -27,6 +29,8 @@ public class RunRecordBean extends BaseBean{
         end_time = jsonObj.optLong("endTime");
         mile = jsonObj.optDouble("mile");
         calory = jsonObj.optLong("calory");
+        steps = jsonObj.optLong("steps");
+        strStartTime = jsonObj.optString("strStartTime");
         return this;
     }
 
@@ -68,5 +72,21 @@ public class RunRecordBean extends BaseBean{
 
     public void setCalory(long calory) {
         this.calory = calory;
+    }
+
+    public String getStrStartTime() {
+        return strStartTime;
+    }
+
+    public void setStrStartTime(String strStartTime) {
+        this.strStartTime = strStartTime;
+    }
+
+    public long getSteps() {
+        return steps;
+    }
+
+    public void setSteps(long steps) {
+        this.steps = steps;
     }
 }
