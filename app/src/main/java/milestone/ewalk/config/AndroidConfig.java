@@ -5,7 +5,7 @@ package milestone.ewalk.config;
  */
 public class AndroidConfig {
 //    public static String ip_address = "http://192.168.1.88:8899"; // 接口服务器IP地址
-//    public static String ip_address = "http://192.168.1.138:8080"; // 接口服务器IP地址
+//    public static String ip_address = "http://192.168.1.136:8080"; // 接口服务器IP地址
     public static String ip_address = "http://218.65.96.6:8080"; // 正式服务器IP地址
 //    public static String ip_address = "http://120.76.41.254:8080"; // 正式服务器IP地址
 
@@ -67,4 +67,7 @@ public class AndroidConfig {
 
     //获取最新版本
     public static String UpdateVersion = "updateVersion";
+
+    //积分详情
+    public static String IntegralInfo = "getIntegralInfo";
 }

@@ -18,7 +18,7 @@ public class UserBean extends BaseBean {
     private String company;
     private String poster;
     private long steps;
-    private long points;
+    private double points;
     private String token;
     private long calory;
     private int userId;
@@ -44,7 +44,7 @@ public class UserBean extends BaseBean {
         company = jsonObj.optString("company");
         poster = jsonObj.optString("poster");
         steps = jsonObj.optLong("steps");
-        points = jsonObj.optLong("points");
+        points = jsonObj.optDouble("points");
         calory = jsonObj.optLong("calory");
         return this;
     }
@@ -129,11 +129,11 @@ public class UserBean extends BaseBean {
         this.steps = steps;
     }
 
-    public long getPoints() {
+    public double getPoints() {
         return points;
     }
 
-    public void setPoints(long points) {
+    public void setPoints(double points) {
         this.points = points;
     }
 

@@ -128,7 +128,7 @@ public class ActivityPersonInfo extends ActivityBase{
         tv_height_weight.setText(userBean.getHeight()+"cm,"+userBean.getWeight()+"kg");
         tv_step.setText(userBean.getSteps()+"");
         tv_mile.setText(BigDecimalUtil.doubleChange(userBean.getRecord(),2)+"");
-        tv_points.setText(userBean.getPoints()+"");
+        tv_points.setText(BigDecimalUtil.doubleChange(userBean.getPoints(),1)+"");
         double kcal = Util.getCalory(userBean.getWeight(), userBean.getRecord());
         kcal = BigDecimalUtil.doubleChange(kcal, 0);
         tv_kcal.setText(kcal+"");

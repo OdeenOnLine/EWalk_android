@@ -237,6 +237,7 @@
                 style="@style/set_item_Line_ver"/>
 
             <LinearLayout
+                android:id="@+id/ll_integral"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"

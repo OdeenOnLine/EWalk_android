@@ -45,7 +45,7 @@ import milestone.ewalk.widget.dialog.InfoMsgHint;
 public class ActivityMine extends ActivityBase{
     private ImageView iv_poster;
     private ImageView iv_switch;
-    private LinearLayout ll_record;
+    private LinearLayout ll_record,ll_integral;
     private TextView tv_union,tv_name,tv_company,tv_height_weight,tv_step,tv_mile,tv_points,tv_kcal;
     private LinearLayout ll_pwd_change,ll_message_center,ll_version;
     private TextView tv_version;
@@ -78,7 +78,8 @@ public class ActivityMine extends ActivityBase{
         iv_switch.setOnClickListener(this);
         ll_record = (LinearLayout) findViewById(R.id.ll_record);
         ll_record.setOnClickListener(this);
-
+        ll_integral = (LinearLayout) findViewById(R.id.ll_integral);
+        ll_integral.setOnClickListener(this);
         tv_union = (TextView) findViewById(R.id.tv_union);
         tv_name = (TextView) findViewById(R.id.tv_name);
         tv_company = (TextView) findViewById(R.id.tv_company);
@@ -180,7 +181,7 @@ public class ActivityMine extends ActivityBase{
         tv_height_weight.setText(userBean.getHeight()+"cm,"+userBean.getWeight()+"kg");
         tv_step.setText(step+"");
         tv_mile.setText(BigDecimalUtil.doubleChange(userBean.getRecord(),2)+"");
-        tv_points.setText(userBean.getPoints()+"");
+        tv_points.setText(BigDecimalUtil.doubleChange(userBean.getPoints(),1)+"");
         double kcal = Util.getCalory(userBean.getWeight(), userBean.getRecord());
         kcal = BigDecimalUtil.doubleChange(kcal, 0);
         tv_kcal.setText(kcal+"");
@@ -219,6 +220,9 @@ public class ActivityMine extends ActivityBase{
                 break;
             case R.id.ll_record:
                 startA(ActivityHistoryRecord.class,false,true);
+                break;
+            case R.id.ll_integral:
+                startA(ActivityIntegralInfo.class,false,true);
                 break;
             case R.id.iv_poster:
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
