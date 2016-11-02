@@ -1,5 +1,6 @@
 package milestone.ewalk.bean;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import milestone.ewalk.BaseBean;
@@ -9,9 +10,10 @@ import milestone.ewalk.exception.NetRequestException;
  * Created by ltf on 2016/6/20.
  */
 public class IntegralBean extends BaseBean {
-    private String pdtime;
+    private JSONObject pdtime;
     private String pdsource;
     private double pdpoints;
+    private long time=0;
 
 
     @Override
@@ -21,20 +23,21 @@ public class IntegralBean extends BaseBean {
 
     @Override
     public Object parseJSON(JSONObject jsonObj) throws NetRequestException {
+        try {
+            pdtime = jsonObj.getJSONObject("pdtime");
+            if(pdtime!=null) {
+                time = pdtime.optLong("time");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        pdtime = jsonObj.optString("pdtime");
         pdsource = jsonObj.optString("pdsource");
         pdpoints = jsonObj.optDouble("pdpoints");
         return this;
     }
 
-    public String getPdtime() {
-        return pdtime;
-    }
 
-    public void setPdtime(String pdtime) {
-        this.pdtime = pdtime;
-    }
 
     public String getPdsource() {
         return pdsource;
@@ -50,5 +53,13 @@ public class IntegralBean extends BaseBean {
 
     public void setPdpoints(double pdpoints) {
         this.pdpoints = pdpoints;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

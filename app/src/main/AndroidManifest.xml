@@ -146,6 +146,11 @@
             android:configChanges="orientation|screenSize"
             />
 
+        <activity android:name=".ui.activity.ActivityHelpMessage"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
+            />
+
         <service android:name=".service.StepCounterService" />
 
 

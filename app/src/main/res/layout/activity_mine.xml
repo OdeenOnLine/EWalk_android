@@ -439,6 +439,39 @@
     </LinearLayout>
 
     <View
+        android:layout_marginLeft="20dp"
+        style="@style/set_item_Line_hor"/>
+
+    <LinearLayout
+        android:id="@+id/ll_help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:text="隐私条款"
+            android:layout_marginLeft="10dp"
+            />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_arrow_right_big"
+            />
+
+
+    </LinearLayout>
+
+    <View
         style="@style/set_item_Line_hor"
         />
 

@@ -86,13 +86,13 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="BaiduTraceSDK_v2_1_15" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.2.1" level="project" />
-    <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
     <orderEntry type="library" exported="" name="ksoap2-android-assembly-3.3.0-jar-with-dependencies" level="project" />
     <orderEntry type="library" exported="" name="httpmime-4.1.2" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="BaiduLBS_Android" level="project" />
+    <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.2.1" level="project" />
     <orderEntry type="module" module-name="pull" exported="" />
   </component>
 </module>

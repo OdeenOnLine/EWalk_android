@@ -18,7 +18,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.PropertyInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import milestone.ewalk.R;
@@ -44,6 +46,7 @@ public class ActivityIntegralInfo extends ActivityBase{
     private int pageSize=10;
     private List<IntegralBean> integralBeans = new ArrayList<>();
     private DataAdapter adapter;
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     @Override
@@ -228,8 +231,11 @@ public class ActivityIntegralInfo extends ActivityBase{
             final IntegralBean bean = integralBeans.get(position);
 
             localViewHolder.tv_content.setText(bean.getPdsource());
-            if(bean.getPdtime()!=null && !bean.getPdtime().equals("null")) {
-                localViewHolder.tv_time.setText(bean.getPdtime());
+            if(bean.getTime()!=0) {
+                Date date = new Date(bean.getTime());
+                localViewHolder.tv_time.setText(simpleDateFormat.format(date));
+            }else{
+                localViewHolder.tv_time.setText("");
             }
             double integral = BigDecimalUtil.doubleChange(bean.getPdpoints(),1);
             localViewHolder.tv_integral.setText(integral+"积分");

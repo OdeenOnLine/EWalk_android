@@ -47,7 +47,7 @@ public class ActivityMine extends ActivityBase{
     private ImageView iv_switch;
     private LinearLayout ll_record,ll_integral;
     private TextView tv_union,tv_name,tv_company,tv_height_weight,tv_step,tv_mile,tv_points,tv_kcal;
-    private LinearLayout ll_pwd_change,ll_message_center,ll_version;
+    private LinearLayout ll_pwd_change,ll_message_center,ll_version,ll_help;
     private TextView tv_version;
     private TextView tv_logout;
 
@@ -98,6 +98,8 @@ public class ActivityMine extends ActivityBase{
         ll_version = (LinearLayout) findViewById(R.id.ll_version);
         ll_version.setOnClickListener(this);
         tv_version = (TextView) findViewById(R.id.tv_version);
+        ll_help = (LinearLayout) findViewById(R.id.ll_help);
+        ll_help.setOnClickListener(this);
 
         getVersion();
         personInfoTask();
@@ -251,6 +253,9 @@ public class ActivityMine extends ActivityBase{
 //                    Util.Tip(mContext, "您的手机上没有安装Android应用市场");
 //                    e.printStackTrace();
 //                }
+                break;
+            case R.id.ll_help:
+                startA(ActivityHelpMessage.class,false,true);
                 break;
         }
     }

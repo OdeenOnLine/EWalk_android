@@ -72,6 +72,7 @@ public class StepCounterService extends Service implements SensorEventListener{
     public static long startTime=0;
     private float lastCount=0;//上次记录的步行总数
     private  SharePreferenceUtil shareUtils;
+    public static int maxSecondStep = 5;
 
 
     @Override
@@ -194,10 +195,10 @@ public class StepCounterService extends Service implements SensorEventListener{
     public void onSensorChanged(SensorEvent event) {
 
         if (event.sensor.getType()==sensorTypeC) {
-            String values="";
-            for(int i=0;i<event.values.length;i++){
-                values += event.values[i]+"====";
-            }
+//            String values="";
+//            for(int i=0;i<event.values.length;i++){
+//                values += event.values[i]+"====";
+//            }
             mCount = event.values[0];
             int addStep=0;
             if(lastCount!=0){
@@ -256,10 +257,19 @@ public class StepCounterService extends Service implements SensorEventListener{
                 BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
                 // 添加新的数据行
 //            bw.write("\"李四\"" + "," + "\"1988\"" + "," + "\"1992\"");
-                double distance = nowStep * 0.55 / 1000;
+                float newStep = 0;
+                long nowTime = new Date().getTime() / 1000;
+                long second = nowTime - startTime/1000;
+                if(second*maxSecondStep < nowStep){
+                    newStep = second*maxSecondStep;
+                }else{
+                    newStep = nowStep;
+                }
+
+                double distance = newStep * 0.55 / 1000;
                 double kcal = Util.getCalory(userBean.getWeight(), distance);
                 kcal = BigDecimalUtil.doubleChange(kcal, 0);
-                bw.write(startTime/1000+"," + new Date().getTime() / 1000 + "," + (int) nowStep + "," + distance + "," + kcal);
+                bw.write(startTime/1000+"," + nowTime + "," + (int) newStep + "," + distance + "," + kcal);
                 bw.newLine();
                 bw.close();
                 mDetector -= nowStep;
