@@ -36,6 +36,7 @@ import milestone.ewalk.widget.CircularImage;
 
 /**
  * Created by ltf on 2016/7/20.
+ * 公司个人排行榜页面
  */
 public class ActivityCompanyRank extends ActivityBase{
     private PullToRefreshListView lv_rank;

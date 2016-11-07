@@ -13,6 +13,7 @@ import milestone.ewalk.ui.ActivityBase;
 
 /**
  * Created by ltf on 2016/7/19.
+ * 欢迎页
  */
 public class ActivityWelcome extends ActivityBase{
     private WebView web_view;

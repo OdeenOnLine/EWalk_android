@@ -385,6 +385,9 @@ public class ActivityRank extends ActivityBase{
         }
     }
 
+    /**
+     * 月周日切换
+     */
     public class MyOnClickListener implements View.OnClickListener
     {
         private int index = 0;

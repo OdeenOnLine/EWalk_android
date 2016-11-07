@@ -7,6 +7,7 @@ import milestone.ewalk.exception.NetRequestException;
 
 /**
  * Created by ltf on 2016/7/14.
+ * 消息
  */
 public class MessageBean extends BaseBean{
     private String title;

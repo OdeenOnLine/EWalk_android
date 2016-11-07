@@ -8,6 +8,9 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
+/**
+ * 圆形头像+编辑遮罩
+ */
 public class CircularEditImage extends MaskedEditImage {
     public CircularEditImage(Context paramContext) {
         super(paramContext);

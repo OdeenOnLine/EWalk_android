@@ -7,6 +7,7 @@ import milestone.ewalk.exception.NetRequestException;
 
 /**
  * Created by ltf on 2016/7/7.
+ * 跑步记录
  */
 public class RunRecordBean extends BaseBean{
     private long last;

@@ -13,6 +13,7 @@ import milestone.ewalk.ui.ActivityBase;
 
 /**
  * Created by ltf on 2016/7/14.
+ * 消息详情
  */
 public class ActivityMessageDetail extends ActivityBase{
     private TextView tv_title,tv_time,tv_content;

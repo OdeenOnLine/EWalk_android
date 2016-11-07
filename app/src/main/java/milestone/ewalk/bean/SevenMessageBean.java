@@ -9,6 +9,7 @@ import milestone.ewalk.exception.NetRequestException;
 
 /**
  * Created by ltf on 2016/6/20.
+ * 7天
  */
 public class SevenMessageBean extends BaseBean {
     private String[] steps;

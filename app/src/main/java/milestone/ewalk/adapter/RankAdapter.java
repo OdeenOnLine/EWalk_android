@@ -19,6 +19,9 @@ import milestone.ewalk.bean.RankBean;
 import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.widget.CircularImage;
 
+/**
+ * 自定义排行榜adapter
+ */
 public class RankAdapter extends BaseAdapter {
 
 	private Context context;
@@ -87,6 +90,7 @@ public class RankAdapter extends BaseAdapter {
         RankBean rankBean = rankBeans.get(position);
         int rank = rankBean.getRank();
 
+        //判断排行名次，前3分别是金银铜牌，后面用数字表示
         if(rank==1){
             viewHolder.iv_rank.setImageResource(R.drawable.icon_rank_first);
             viewHolder.iv_rank.setVisibility(View.VISIBLE);
@@ -109,15 +113,16 @@ public class RankAdapter extends BaseAdapter {
             viewHolder.tv_core.setTextColor(Color.parseColor("#AAB2B8"));
         }
 
+        //判断是团队并且是我的团队则显示我的团队标志
         if(type == 2 && myRank == rank){
             viewHolder.tv_my_team.setVisibility(View.VISIBLE);
         }else{
             viewHolder.tv_my_team.setVisibility(View.GONE);
         }
 
+        //判断是个人，则还要显示公司名字
         if(type==1){
             viewHolder.tv_company_name.setVisibility(View.VISIBLE);
-
         }else{
             viewHolder.tv_company_name.setVisibility(View.GONE);
         }

@@ -35,6 +35,7 @@ import milestone.ewalk.util.Util;
 
 /**
  * Created by ltf on 2016/10/13.
+ * 积分信息
  */
 public class ActivityIntegralInfo extends ActivityBase{
     private PullToRefreshListView lv_integral;
@@ -86,7 +87,7 @@ public class ActivityIntegralInfo extends ActivityBase{
         }
     };
 
-    //新建异步任务排行信息
+    //新建异步任务积分信息
     private void IntegralTask() {
         new AsyncTask<Void, Void, String>()
         {
@@ -192,6 +193,9 @@ public class ActivityIntegralInfo extends ActivityBase{
         }
     }
 
+    /**
+     * 自定义积分adapter
+     */
     private class DataAdapter extends BaseAdapter {
         public int getCount() {
             if (integralBeans != null) {

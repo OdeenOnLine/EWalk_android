@@ -2,6 +2,7 @@ package milestone.ewalk.config;
 
 /**
  * Created by ltf on 2016/6/17.
+ * 网络配置及相关接口
  */
 public class AndroidConfig {
 //    public static String ip_address = "http://192.168.1.88:8899"; // 接口服务器IP地址

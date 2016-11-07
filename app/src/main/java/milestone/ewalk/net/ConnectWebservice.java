@@ -17,6 +17,7 @@ import milestone.ewalk.util.Util;
 
 /**
  * Created by ltf on 2016/6/16.
+ * webservice连接类
  */
 public class ConnectWebservice {
     private static ConnectWebservice connectWebservice = null;

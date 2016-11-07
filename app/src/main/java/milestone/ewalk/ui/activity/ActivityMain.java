@@ -57,13 +57,14 @@ import milestone.ewalk.widget.SpringProgressView;
 
 /**
  * Created by ltf on 2016/3/30.
+ * 7天主界面
  */
 public class ActivityMain extends ActivityBase{
-    public static Intent service;
+    public static Intent service;//计步服务
     private Button btn_run;
-    private SpringProgressView progress1,progress2,progress3,progress4,progress5,progress6,progress7;
-    private TextView tv_step1,tv_step2,tv_step3,tv_step4,tv_step5,tv_step6,tv_step7;
-    private TextView tv_day1,tv_day2,tv_day3,tv_day4,tv_day5,tv_day6,tv_day7;
+    private SpringProgressView progress1,progress2,progress3,progress4,progress5,progress6,progress7;//7天柱状图
+    private TextView tv_step1,tv_step2,tv_step3,tv_step4,tv_step5,tv_step6,tv_step7;//7天步数
+    private TextView tv_day1,tv_day2,tv_day3,tv_day4,tv_day5,tv_day6,tv_day7;//7天日期
     private TextView tv_rank;
     private TextView tv_feedback,tv_mine;
     private UserBean userBean;
@@ -83,6 +84,9 @@ public class ActivityMain extends ActivityBase{
     private boolean[] stepShows = {false,false,false,false,false,false,false};
     private boolean isDestroy = false;
 
+    /**
+     * 信息变更广播
+     */
     class NewsBrocastReceiver extends BroadcastReceiver {
 
         @Override
@@ -187,6 +191,7 @@ public class ActivityMain extends ActivityBase{
         getHintTask();
 
 
+        //定时器更新显示步数变化
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -214,7 +219,9 @@ public class ActivityMain extends ActivityBase{
     }
 
 
-
+    /**
+     * 加载当天相关信息
+     */
     private void initTodayMessage() {
         step = (int) StepCounterService.dayDetector;
         if(steps!=null){
@@ -288,7 +295,7 @@ public class ActivityMain extends ActivityBase{
     }
 
     /**
-     * 显示历史信息
+     * 显示7天信息
      */
     private void initMessage() {
 //        String[] titlesArray = sevenMessageBean.getSteps();

@@ -22,7 +22,7 @@ import milestone.ewalk.ui.ActivityBase;
 import milestone.ewalk.util.Util;
 
 /**
- * 我的跑步
+ * 我的战绩
  * Created by ltf on 2016/5/31.
  */
 public class ActivityMyRun extends ActivityBase{

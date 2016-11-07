@@ -7,6 +7,7 @@ import milestone.ewalk.exception.NetRequestException;
 
 /**
  * Created by ltf on 2016/6/20.
+ * 用户
  */
 public class UserBean extends BaseBean {
     private String name;

@@ -22,7 +22,7 @@ import android.view.View;
 import milestone.ewalk.util.Util;
 
 /***
- * 自定义进度条
+ * 自定义柱状图进度条
  * Created by ltf on 2016/6/14.
  */
 public class SpringProgressView extends View {

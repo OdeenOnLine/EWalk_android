@@ -105,6 +105,9 @@ public class ActivityMine extends ActivityBase{
         personInfoTask();
     }
 
+    /**
+     * 获取版本号
+     */
     private void getVersion() {
         try {
             PackageManager manager = getPackageManager();
@@ -174,6 +177,9 @@ public class ActivityMine extends ActivityBase{
         }.execute() ;
     }
 
+    /**
+     * 显示用户信息
+     */
     private void initUser() {
 
         ImageLoader.getInstance().displayImage(userBean.getPoster(),iv_poster);

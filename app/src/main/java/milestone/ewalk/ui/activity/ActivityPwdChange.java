@@ -23,6 +23,7 @@ import milestone.ewalk.util.Util;
 
 /**
  * Created by ltf on 2016/7/6.
+ * 密码修改
  */
 public class ActivityPwdChange extends ActivityBase{
     private EditText edt_pwd,edt_new_pwd,edt_confirm_pwd;

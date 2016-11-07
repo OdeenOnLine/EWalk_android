@@ -45,6 +45,7 @@ import milestone.ewalk.util.Util;
 
 /**
  * Created by ltf on 2016/3/30.
+ * 计步服务
  */
 
 public class StepCounterService extends Service implements SensorEventListener{
@@ -66,13 +67,13 @@ public class StepCounterService extends Service implements SensorEventListener{
     private Timer dayTimer;
     public static UserBean userBean;
     private BroadcastReceiver mBR;
-    private String path = Environment.getExternalStorageDirectory().getPath()+ "/eWalk";
+    private String path = Environment.getExternalStorageDirectory().getPath()+ "/eWalk";//上传步数文件路径
     private File file;
     public static float dayDetector;//当天步数
-    public static long startTime=0;
+    public static long startTime=0;//上传步数的开始时间
     private float lastCount=0;//上次记录的步行总数
     private  SharePreferenceUtil shareUtils;
-    public static int maxSecondStep = 5;
+    public static int maxSecondStep = 8;//每秒最大步数限制
 
 
     @Override
@@ -115,6 +116,7 @@ public class StepCounterService extends Service implements SensorEventListener{
 //        mWakeLock.acquire();
         register();
 
+        //定时任务，每个整点上传步数
         Calendar c = Calendar.getInstance();
         final int minute = c.get(Calendar.MINUTE);
 //        if(minute>=58){
@@ -140,6 +142,7 @@ public class StepCounterService extends Service implements SensorEventListener{
             }, (60 - minute)*60*1000, 60*60 * 1000);
 //        }
 
+        //定时任务，凌晨重置步数，更新排行榜提示
         long oneDay = 24 * 60 * 60 * 1000;
         long initDelay  = getTimeMillis("00:00:00") - System.currentTimeMillis();
         initDelay = initDelay > 0 ? initDelay : oneDay + initDelay;
@@ -173,6 +176,9 @@ public class StepCounterService extends Service implements SensorEventListener{
         return 0;
     }
 
+    /**
+     * 注册计步相关传感器
+     */
     public void register(){
 
         register(mStepCount, SensorManager.SENSOR_DELAY_FASTEST);
@@ -193,20 +199,20 @@ public class StepCounterService extends Service implements SensorEventListener{
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         if (event.sensor.getType()==sensorTypeC) {
 //            String values="";
 //            for(int i=0;i<event.values.length;i++){
 //                values += event.values[i]+"====";
 //            }
-            mCount = event.values[0];
-            int addStep=0;
+            mCount = event.values[0];//传感器当前步数
+            int addStep=0;//新增步数
             if(lastCount!=0){
                 addStep = (int) (mCount-lastCount);
             }
             lastCount = mCount;
             Calendar calendar = Calendar.getInstance();
             int hour=calendar.get(Calendar.HOUR_OF_DAY);
+            //只取早上6点到晚上11点
             if(hour>= 6 && hour < 23) {
                 if(addStep>0){
                     mDetector += addStep;

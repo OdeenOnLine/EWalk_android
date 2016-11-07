@@ -92,7 +92,7 @@ public class ActivityMessageCenter extends ActivityBase{
         messageTask();
     }
 
-    //新建异步任务修改密码
+    //新建异步任务获取消息
     private void messageTask() {
         new AsyncTask<Void, Void, String>()
         {

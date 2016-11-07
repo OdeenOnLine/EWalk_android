@@ -103,7 +103,7 @@ public class ActivityHistoryRecord extends ActivityBase{
         recordTask();
     }
 
-    //新建异步任务修改密码
+    //新建异步任务历史记录
     private void recordTask() {
         new AsyncTask<Void, Void, String>()
         {
@@ -206,7 +206,7 @@ public class ActivityHistoryRecord extends ActivityBase{
             case R.id.iv_back:
                 finishA(true);
                 break;
-            case R.id.tv_walk:
+            case R.id.tv_walk://走路记录
                 if(type == 2){
                     type = 1;
                     tv_walk.setBackgroundResource(R.drawable.bg_button_blue);
@@ -220,7 +220,7 @@ public class ActivityHistoryRecord extends ActivityBase{
                     recordTask();
                 }
                 break;
-            case R.id.tv_run:
+            case R.id.tv_run://跑步记录
                 if(type == 1){
                     type = 2;
                     tv_run.setBackgroundResource(R.drawable.bg_button_blue);
@@ -237,6 +237,9 @@ public class ActivityHistoryRecord extends ActivityBase{
         }
     }
 
+    /**
+     * 自定义记录adapter
+     */
     private class DataAdapter extends BaseAdapter {
         public int getCount() {
             if (runRecordBeans != null) {
