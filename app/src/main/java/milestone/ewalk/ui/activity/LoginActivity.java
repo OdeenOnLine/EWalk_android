@@ -75,6 +75,7 @@ public class LoginActivity extends ActivityBase{
                 }else{
                     if(Util.isNetworkAvailable(mContext)) {
                         loginTask();
+//                        startA(ActivityMain.class, true, true);
                     }
                 }
                 break;

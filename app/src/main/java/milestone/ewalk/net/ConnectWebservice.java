@@ -33,6 +33,8 @@ public class ConnectWebservice {
         // EndPoint
         String endPoint = AndroidConfig.ip_address+"/kyweb_oracle/ws/rpc?wsdl=CoreService.wsdl";
 //        http://120.76.41.254:8080/kyweb_oracle/ws/rpc?wsdl=CoreService.wsdl
+//        String endPoint = AndroidConfig.ip_address+"/ftmallweb/ws/rpc?wsdl=CoreService.wsdl";
+
 
         // 指定WebService的命名空间和调用的方法名
         SoapObject rpc = new SoapObject(nameSpace, methodName);

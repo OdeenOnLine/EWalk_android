@@ -3,9 +3,12 @@ package milestone.ewalk.ui.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.webkit.DownloadListener;
@@ -22,6 +25,7 @@ import org.kobjects.base64.Base64;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -58,6 +62,8 @@ public class ActivityMine extends ActivityBase{
     private CircularImage iv_message_hint;
     private String versionName = "";
     private InfoMsgHint msgHint;
+    private TextView tv_email;
+    private String path = Environment.getExternalStorageDirectory().getPath()+ "/eWalk";//上传步数文件路径
 
 
     @Override
@@ -100,6 +106,8 @@ public class ActivityMine extends ActivityBase{
         tv_version = (TextView) findViewById(R.id.tv_version);
         ll_help = (LinearLayout) findViewById(R.id.ll_help);
         ll_help.setOnClickListener(this);
+        tv_email = (TextView) findViewById(R.id.tv_email);
+        tv_email.setOnClickListener(this);
 
         getVersion();
         personInfoTask();
@@ -138,7 +146,7 @@ public class ActivityMine extends ActivityBase{
         {
             @Override
             protected void onPreExecute() {
-                showLoadingDialog();
+                showLoadingDialog("");
             }
 
             @Override
@@ -263,6 +271,22 @@ public class ActivityMine extends ActivityBase{
             case R.id.ll_help:
                 startA(ActivityHelpMessage.class,false,true);
                 break;
+            case R.id.tv_email:
+
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                String[] tos = { "515173307@qq.com","yayu.li@qq.com" };
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, tos);
+
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "步数数据");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "计步");
+                File emailFile = new File(path + "/emailSteps.csv");
+                emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(emailFile));
+//                emailIntent.setType("image/*");
+                emailIntent.setType("message/rfc882");
+                Intent.createChooser(emailIntent, "Choose Email Client");
+                startActivity(emailIntent);
+                break;
         }
     }
 
@@ -272,7 +296,7 @@ public class ActivityMine extends ActivityBase{
         {
             @Override
             protected void onPreExecute() {
-                showLoadingDialog();
+                showLoadingDialog("");
             }
 
             @Override
@@ -291,7 +315,8 @@ public class ActivityMine extends ActivityBase{
                         if (jsonObject.optInt("retNum")==0) {
                             String version = jsonObject.optString("versionName");
                             final String url = jsonObject.optString("url");
-                            if(version.equals(versionName)){
+                            if(version.compareTo(versionName)<=0){
+//                            if(version.equals(versionName)){
                                 Util.Tip(mContext,"当前已是最新版本");
                             }else{
                                 msgHint = new InfoMsgHint(mContext,R.style.MyDialog1);
@@ -359,7 +384,7 @@ public class ActivityMine extends ActivityBase{
         {
             @Override
             protected void onPreExecute() {
-                showLoadingDialog();
+                showLoadingDialog("");
             }
 
             @Override
@@ -424,7 +449,7 @@ public class ActivityMine extends ActivityBase{
             case PIC_Select_POSTER_ImageFromLocal:
                 if (data != null && data.getData() != null) {
                     Uri uri = data.getData();
-                    showLoadingDialog();
+                    showLoadingDialog("");
                     changeInfoTask(uri);
                 }
                 break;
@@ -437,7 +462,7 @@ public class ActivityMine extends ActivityBase{
         {
             @Override
             protected void onPreExecute() {
-                showLoadingDialog();
+                showLoadingDialog("更新中");
             }
 
             @Override
@@ -486,21 +511,26 @@ public class ActivityMine extends ActivityBase{
             byte[] buffer = new byte[1024];
 
             int count = 0;
-
             while((count = fis.read(buffer)) >= 0){
-
                 baos.write(buffer, 0, count);
-
             }
-
+            Bitmap bitmapSelected = decodeUriAsBitmap(uri);
+            int size = 100;
+            bitmapSelected.compress(Bitmap.CompressFormat.JPEG, size, baos);
+            while (baos.toByteArray().length / 1024 > 100) {
+                baos.reset();
+                size -= 10;
+                bitmapSelected.compress(Bitmap.CompressFormat.JPEG, size, baos);
+            }
             uploadBuffer = new String(Base64.encode(baos.toByteArray()));  //
+            bitmapSelected.recycle();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
+        Util.Log("ltf","uploadBuffer============="+uploadBuffer);
         ArrayList<PropertyInfo> proInfoList = new ArrayList<PropertyInfo>();
         PropertyInfo proInfo = new PropertyInfo();
         proInfo.setName("token");
@@ -529,5 +559,23 @@ public class ActivityMine extends ActivityBase{
                 );
 
         return jsonData;
+    }
+
+    /**
+     * 根据URI获取位图
+     *
+     * @param uri
+     * @return 对应的位图
+     */
+    private Bitmap decodeUriAsBitmap(Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeStream(getContentResolver()
+                    .openInputStream(uri));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return bitmap;
     }
 }

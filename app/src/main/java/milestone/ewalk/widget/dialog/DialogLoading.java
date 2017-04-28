@@ -26,7 +26,7 @@ public class DialogLoading extends Dialog {
         setContentView(R.layout.dialog_loading);
 
         tv = (TextView) this.findViewById(R.id.tv);
-        tv.setText("获取信息中，请稍后...");
+        tv.setText("加载中...");
         if(!content.equals("")){
             tv.setText(content);
         }

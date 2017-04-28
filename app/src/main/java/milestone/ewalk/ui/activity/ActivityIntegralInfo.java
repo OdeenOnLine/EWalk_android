@@ -242,7 +242,7 @@ public class ActivityIntegralInfo extends ActivityBase{
                 localViewHolder.tv_time.setText("");
             }
             double integral = BigDecimalUtil.doubleChange(bean.getPdpoints(),1);
-            localViewHolder.tv_integral.setText(integral+"积分");
+            localViewHolder.tv_integral.setText(integral+"积分"+"\n总共"+bean.getPdaftertotal()+"积分");
 
             return convertView;
         }

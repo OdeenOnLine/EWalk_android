@@ -7,9 +7,11 @@ package milestone.ewalk.config;
 public class AndroidConfig {
 //    public static String ip_address = "http://192.168.1.88:8899"; // 接口服务器IP地址
 //    public static String ip_address = "http://192.168.1.136:8080"; // 接口服务器IP地址
-    public static String ip_address = "http://218.65.96.6:8080"; // 正式服务器IP地址
-//    public static String ip_address = "http://120.76.41.254:8080"; // 正式服务器IP地址
+//    public static String ip_address = "http://139.224.228.216:8080"; // 正式服务器IP地址
+    public static String ip_address = "http://www.edonghealth.com:8080"; // 正式服务器IP地址http://218.65.96.6:8080
+    //
 
+//    http://139.224.228.216:8080/ftmallweb
 
 
     //管理员登录

@@ -15,6 +15,7 @@ public class IntegralBean extends BaseBean {
     private String pdsource;
     private double pdpoints;
     private long time=0;
+    private String pdaftertotal;
 
 
     @Override
@@ -35,6 +36,7 @@ public class IntegralBean extends BaseBean {
 
         pdsource = jsonObj.optString("pdsource");
         pdpoints = jsonObj.optDouble("pdpoints");
+        pdaftertotal = jsonObj.optString("pdaftertotal");
         return this;
     }
 
@@ -62,5 +64,13 @@ public class IntegralBean extends BaseBean {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getPdaftertotal() {
+        return pdaftertotal;
+    }
+
+    public void setPdaftertotal(String pdaftertotal) {
+        this.pdaftertotal = pdaftertotal;
     }
 }

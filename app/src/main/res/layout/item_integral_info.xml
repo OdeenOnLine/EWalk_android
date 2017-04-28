@@ -46,10 +46,9 @@
             android:text="1积分"
             android:textSize="15sp"
             android:textColor="@color/my_orange"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
+            android:gravity="right"
             />
     </LinearLayout>
 

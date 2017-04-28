@@ -17,6 +17,7 @@ import java.util.Map;
 import milestone.ewalk.R;
 import milestone.ewalk.bean.RankBean;
 import milestone.ewalk.util.BigDecimalUtil;
+import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
 
 /**
@@ -69,7 +70,7 @@ public class RankAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder viewHolder = null;
-		if (convertView == null) {
+//		if (convertView == null) {
 			inflater = LayoutInflater.from(parent.getContext());
 			convertView = inflater.inflate(R.layout.item_rank, null);
 			viewHolder = new ViewHolder();
@@ -83,9 +84,9 @@ public class RankAdapter extends BaseAdapter {
             viewHolder.tv_company_name = (TextView) convertView.findViewById(R.id.tv_company_name);
             viewHolder.tv_wanbu = (TextView) convertView.findViewById(R.id.tv_wanbu);
 			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder) convertView.getTag();
-		}
+//		} else {
+//			viewHolder = (ViewHolder) convertView.getTag();
+//		}
 
         RankBean rankBean = rankBeans.get(position);
         int rank = rankBean.getRank();
@@ -126,7 +127,11 @@ public class RankAdapter extends BaseAdapter {
         }else{
             viewHolder.tv_company_name.setVisibility(View.GONE);
         }
-        ImageLoader.getInstance().displayImage(rankBean.getPoster(),viewHolder.iv_poster);
+        if(rankBean.getPoster()!=null && !rankBean.getPoster().equals("") && !rankBean.getPoster().contains("null")) {
+            ImageLoader.getInstance().displayImage(rankBean.getPoster(), viewHolder.iv_poster);
+        } else{
+            viewHolder.iv_poster.setImageResource(R.drawable.icon_default_poster);
+        }
         viewHolder.tv_name.setText(rankBean.getName());
         viewHolder.tv_company_name.setText(rankBean.getCompanyName());
         viewHolder.tv_core.setText(rankBean.getSteps()+"");

@@ -73,7 +73,8 @@ public class StepCounterService extends Service implements SensorEventListener{
     public static long startTime=0;//上传步数的开始时间
     private float lastCount=0;//上次记录的步行总数
     private  SharePreferenceUtil shareUtils;
-    public static int maxSecondStep = 8;//每秒最大步数限制
+    public static int maxSecondStep = 20;//每秒最大步数限制
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
     @Override
@@ -153,10 +154,17 @@ public class StepCounterService extends Service implements SensorEventListener{
                 isRankUpdate = true;
                 dayDetector = 0;
                 mDetector = 0;
+                startTime = 0;
                 shareUtils.setDAY_DETECTOR(dayDetector);
                 shareUtils.setM_DETECTOR(mDetector);
+                shareUtils.setStart_TIME(startTime);
             }
         },initDelay,24*60*60*1000);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
     }
 
     /**
@@ -204,6 +212,7 @@ public class StepCounterService extends Service implements SensorEventListener{
 //            for(int i=0;i<event.values.length;i++){
 //                values += event.values[i]+"====";
 //            }
+
             mCount = event.values[0];//传感器当前步数
             int addStep=0;//新增步数
             if(lastCount!=0){
@@ -214,17 +223,29 @@ public class StepCounterService extends Service implements SensorEventListener{
             int hour=calendar.get(Calendar.HOUR_OF_DAY);
             //只取早上6点到晚上11点
             if(hour>= 6 && hour < 23) {
-                if(addStep>0){
-                    mDetector += addStep;
-                    dayDetector += addStep;
-                    shareUtils.setDAY_DETECTOR(dayDetector);
-                    shareUtils.setM_DETECTOR(mDetector);
-                }
-//                mDetector++;
-//                dayDetector++;
-                if(startTime==0){
+
+                Date date = new Date(startTime);
+                if(startTime!=0 && !simpleDateFormat.format(new Date()).equals(simpleDateFormat.format(date))){
                     startTime = System.currentTimeMillis();
                     shareUtils.setStart_TIME(startTime);
+                    if(addStep>=0 && addStep<maxSecondStep){
+                        mDetector = addStep;
+                        dayDetector = addStep;
+                        shareUtils.setDAY_DETECTOR(dayDetector);
+                        shareUtils.setM_DETECTOR(mDetector);
+                    }
+                }else{
+                    if(startTime==0){
+                        startTime = System.currentTimeMillis();
+                        shareUtils.setStart_TIME(startTime);
+                    }
+
+                    if(addStep>=0 && addStep<maxSecondStep){
+                        mDetector += addStep;
+                        dayDetector += addStep;
+                        shareUtils.setDAY_DETECTOR(dayDetector);
+                        shareUtils.setM_DETECTOR(mDetector);
+                    }
                 }
             }
         }
@@ -255,12 +276,17 @@ public class StepCounterService extends Service implements SensorEventListener{
                 csv.mkdir();
             }
             file = new File(path + "/steps.csv");
+            File emailFile = new File(path + "/emailSteps.csv");
             if(!file.exists()){//判断文件是否存在（不存在则创建这个文件）
                 file.createNewFile();//创建文件
+            }
+            if(!emailFile.exists()){//判断文件是否存在（不存在则创建这个文件）
+                emailFile.createNewFile();//创建文件
             }
             if(mDetector!=0) {
 
                 BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
+                BufferedWriter emailbw = new BufferedWriter(new FileWriter(emailFile, true)); // 附加
                 // 添加新的数据行
 //            bw.write("\"李四\"" + "," + "\"1988\"" + "," + "\"1992\"");
                 float newStep = 0;
@@ -278,6 +304,10 @@ public class StepCounterService extends Service implements SensorEventListener{
                 bw.write(startTime/1000+"," + nowTime + "," + (int) newStep + "," + distance + "," + kcal);
                 bw.newLine();
                 bw.close();
+
+                emailbw.write(startTime/1000+"," + nowTime + "," + (int) newStep + "," + distance + "," + kcal);
+                emailbw.newLine();
+                emailbw.close();
                 mDetector -= nowStep;
                 startTime = 0;
 
@@ -316,6 +346,7 @@ public class StepCounterService extends Service implements SensorEventListener{
                     try {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         if (jsonObject.optString("retNum").equals("0")) {
+                            File file = new File(path + "/steps.csv");
                             file.delete();
                             dayDetector = 0;
                             shareUtils.setDAY_DETECTOR(dayDetector);
@@ -340,6 +371,7 @@ public class StepCounterService extends Service implements SensorEventListener{
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
 
+        File file = new File(path + "/steps.csv");
         String strBuffer=null;
         try {
             strBuffer = encodeBase64File(file);
@@ -382,6 +414,12 @@ public class StepCounterService extends Service implements SensorEventListener{
             timer.cancel();
             timer =null;
         }
+
+        if(dayTimer!=null){
+            dayTimer.cancel();
+            dayTimer =null;
+        }
+
 //        if (mWakeLock != null) {
 //            mWakeLock.release();
 //        }

@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -54,6 +57,7 @@ import milestone.ewalk.util.BigDecimalUtil;
 import milestone.ewalk.util.Util;
 import milestone.ewalk.widget.CircularImage;
 import milestone.ewalk.widget.SpringProgressView;
+import milestone.ewalk.widget.dialog.InfoMsgHint;
 
 /**
  * Created by ltf on 2016/3/30.
@@ -83,6 +87,10 @@ public class ActivityMain extends ActivityBase{
     public static boolean hasNewMsg = false;
     private boolean[] stepShows = {false,false,false,false,false,false,false};
     private boolean isDestroy = false;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private String versionName = "";
+    private InfoMsgHint msgHint;
 
     /**
      * 信息变更广播
@@ -104,7 +112,11 @@ public class ActivityMain extends ActivityBase{
         registerReceiver(brocastReceiver, new IntentFilter("StepRefresh"));
         initView();
         initData();
+
+        getVersion();
+        updateVersionTask();
     }
+
 
     private void initView() {
         tv_step = (TextView) findViewById(R.id.tv_step);
@@ -153,6 +165,7 @@ public class ActivityMain extends ActivityBase{
         iv_average_line = (ImageView) findViewById(R.id.iv_average_line);
         iv_rank_hint = (CircularImage) findViewById(R.id.iv_rank_hint);
         iv_message_hint = (CircularImage) findViewById(R.id.iv_message_hint);
+
     }
 
     private void initData() {
@@ -161,24 +174,7 @@ public class ActivityMain extends ActivityBase{
         StepCounterService.userBean = userBean;
         StepCounterService.dayDetector = spUtil.getDAY_DETECTOR();
         StepCounterService.mDetector = spUtil.getM_DETECTOR();
-        StepCounterService.startTime = spUtil.getStart_TIME();
 
-        Calendar c = Calendar.getInstance(); // 当时的日期和时间
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        c.set(Calendar.DAY_OF_MONTH, day-1);
-        tv_day7.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
-        c.set(Calendar.DAY_OF_MONTH, day-2);
-        tv_day6.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
-        c.set(Calendar.DAY_OF_MONTH, day-3);
-        tv_day5.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
-        c.set(Calendar.DAY_OF_MONTH, day-4);
-        tv_day4.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
-        c.set(Calendar.DAY_OF_MONTH, day-5);
-        tv_day3.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
-        c.set(Calendar.DAY_OF_MONTH, day-6);
-        tv_day2.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
-        c.set(Calendar.DAY_OF_MONTH, day-7);
-        tv_day1.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
 
         if(StepCounterService.isRankUpdate){
             iv_rank_hint.setImageResource(R.color.my_red);;
@@ -187,8 +183,8 @@ public class ActivityMain extends ActivityBase{
             iv_rank_hint.setVisibility(View.GONE);
         }
 
-        getMessageTask();
-        getHintTask();
+//        getMessageTask();
+//        getHintTask();
 
 
         //定时器更新显示步数变化
@@ -216,7 +212,145 @@ public class ActivityMain extends ActivityBase{
         }else{
             iv_message_hint.setVisibility(View.GONE);
         }
+        Calendar c = Calendar.getInstance(); // 当时的日期和时间
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        c.set(Calendar.DAY_OF_MONTH, day-1);
+        tv_day7.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+        c.set(Calendar.DAY_OF_MONTH, day-2);
+        tv_day6.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+        c.set(Calendar.DAY_OF_MONTH, day-3);
+        tv_day5.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+        c.set(Calendar.DAY_OF_MONTH, day-4);
+        tv_day4.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+        c.set(Calendar.DAY_OF_MONTH, day-5);
+        tv_day3.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+        c.set(Calendar.DAY_OF_MONTH, day-6);
+        tv_day2.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+        c.set(Calendar.DAY_OF_MONTH, day-7);
+        tv_day1.setText(c.get(Calendar.DAY_OF_MONTH)+"日");
+
+
+        long time = spUtil.getStart_TIME();
+        Date date = new Date(time);
+        if(time!=0 && !simpleDateFormat.format(new Date()).equals(simpleDateFormat.format(date))){
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.set(Calendar.HOUR_OF_DAY, 6);
+//            calendar.set(Calendar.MINUTE, 0);
+//            calendar.set(Calendar.SECOND, 0);
+//            time = calendar.getTimeInMillis();
+            StepCounterService.dayDetector = 0;
+            StepCounterService.mDetector = 0;
+            spUtil.setDAY_DETECTOR(0);
+            spUtil.setM_DETECTOR(0);
+            spUtil.setStart_TIME(0);
+        }
+        StepCounterService.startTime = spUtil.getStart_TIME();
+        initTodayMessage();
     }
+
+
+    /**
+     * 获取版本号
+     */
+    private void getVersion() {
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(this.getPackageName(), 0);
+            versionName = info.versionName;
+            Util.Log("ltf","versionName============"+versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    //获取最新版本
+    private void updateVersionTask() {
+        new AsyncTask<Void, Void, String>()
+        {
+            @Override
+            protected void onPreExecute() {
+                showLoadingDialog("");
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                return updateVersion();		//封装参数
+            }
+
+            @Override
+            protected void onPostExecute(String jsonData) {
+                hideLoadingDialog();
+                if(jsonData==null){
+                    Util.Tip(mContext, "获取最新版本失败");
+                }else {
+                    try {
+                        final JSONObject jsonObject = new JSONObject(jsonData);
+                        if (jsonObject.optInt("retNum")==0) {
+                            String version = jsonObject.optString("versionName");
+                            final String url = jsonObject.optString("url");
+                            if(version.compareTo(versionName)<=0){
+//                            if(version.equals(versionName)){
+//                                Util.Tip(mContext,"当前已是最新版本");
+                            }else{
+                                msgHint = new InfoMsgHint(mContext,R.style.MyDialog1);
+                                msgHint.setContent("有新版本，需要下载更新吗?");
+                                msgHint.hideUpLode();
+                                msgHint.setCancelListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        msgHint.dismiss();
+                                    }
+                                });
+                                msgHint.setOKListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        msgHint.dismiss();
+                                        Uri uri = Uri.parse(url);
+                                        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+                                        startActivity(intent);
+
+                                    }
+                                });
+                                msgHint.show();
+                            }
+
+//                            Util.Log("ltf","jsonObject==========="+jsonObject);
+                        } else if(jsonObject.optInt("retNum")==2016){
+                            Util.Tip(mContext,jsonObject.optString("retMsg"));
+                            stopService(ActivityMain.service);
+                            Bundle bundle = new Bundle();
+                            bundle.putBoolean("autoLogin",false);
+                            startA(LoginActivity.class,bundle,true,true,true);
+                        }else {
+                            Util.Tip(mContext, jsonObject.optString("retMsg"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        }.execute() ;
+    }
+
+
+    private String updateVersion() {
+        ArrayList<PropertyInfo> proInfoList = new ArrayList<PropertyInfo>();
+//        PropertyInfo proInfo = new PropertyInfo();
+//        proInfo.setName("token");
+//        proInfo.setValue(userBean.getToken());
+//        proInfoList.add(proInfo);
+        String jsonData = ConnectWebservice.getInStance().connectEwalk
+                (
+                        AndroidConfig.UpdateVersion,
+                        proInfoList
+                );
+
+        return jsonData;
+    }
+
 
 
     /**
@@ -231,11 +365,12 @@ public class ActivityMain extends ActivityBase{
 
         tv_step.setText(step+"");
         double distance  = step * 0.55/1000;
-        double kcal = Util.getCalory(userBean.getWeight(),distance);
+//        double kcal = Util.getCalory(userBean.getWeight(),distance);
         distance = BigDecimalUtil.doubleChange(distance,3);
-        kcal = BigDecimalUtil.doubleChange(kcal,0);
+//        kcal = BigDecimalUtil.doubleChange(kcal,0);
         tv_distance.setText(distance+"公里");
-        tv_calory.setText(kcal+"千卡");
+//        tv_calory.setText(kcal+"千卡");
+
 //        if(StepCounterService.startTime!=0){
 //            int time = (int) ((System.currentTimeMillis()-StepCounterService.startTime)/1000);
 //
@@ -570,12 +705,16 @@ public class ActivityMain extends ActivityBase{
                 csv.mkdir();
             }
             file = new File(path + "/steps.csv");
+            File emailFile = new File(path + "/emailSteps.csv");
             if(!file.exists()){//判断文件是否存在（不存在则创建这个文件）
                 file.createNewFile();//创建文件
             }
-
+            if(!emailFile.exists()){//判断文件是否存在（不存在则创建这个文件）
+                emailFile.createNewFile();//创建文件
+            }
             if(nowStep!=0) {
                 BufferedWriter bw = new BufferedWriter(new FileWriter(file, true)); // 附加
+                BufferedWriter emailbw = new BufferedWriter(new FileWriter(emailFile, true)); // 附加
                 // 添加新的数据行
 //            bw.write("\"李四\"" + "," + "\"1988\"" + "," + "\"1992\"");
                 float newStep = 0;
@@ -594,6 +733,9 @@ public class ActivityMain extends ActivityBase{
                 bw.write(StepCounterService.startTime/1000+"," + nowTime + "," + (int) newStep + "," + distance + "," + kcal);
                 bw.newLine();
                 bw.close();
+                emailbw.write(StepCounterService.startTime/1000+"," + nowTime + "," + (int) newStep + "," + distance + "," + kcal);
+                emailbw.newLine();
+                emailbw.close();
                 StepCounterService.mDetector -= nowStep;
                 StepCounterService.startTime = 0;
 
@@ -636,6 +778,7 @@ public class ActivityMain extends ActivityBase{
                     try {
                         JSONObject jsonObject = new JSONObject(jsonData);
                         if (jsonObject.optString("retNum").equals("0")) {
+                            File file = new File(path + "/steps.csv");
                             file.delete();
                             StepCounterService.dayDetector = 0;
                             spUtil.setDAY_DETECTOR(StepCounterService.dayDetector);
@@ -666,6 +809,7 @@ public class ActivityMain extends ActivityBase{
         proInfo.setValue(userBean.getToken());
         proInfoList.add(proInfo);
 
+        File file = new File(path + "/steps.csv");
         String strBuffer=null;
         try {
             strBuffer = encodeBase64File(file);
